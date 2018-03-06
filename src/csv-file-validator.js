@@ -99,8 +99,8 @@
                 if (_uniqBy(file.data, header.inputName).length !== file.data.length) {
                     file.inValidMessages.push(
                         _isFunction(header.uniqueError)
-                            ? valueConfig.uniqueError(valueConfig.name)
-                            : valueConfig.uniqueError
+                            ? header.uniqueError(header.name)
+                            : header.uniqueError
                     );
                 }
             });
