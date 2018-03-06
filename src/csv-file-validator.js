@@ -43,6 +43,10 @@
         csvData.forEach((row, rowIndex) => {
             const columnData = {};
 
+            if (row.length < config.headers.length) {
+                return;
+            }
+
             row.forEach((columnValue, columnIndex) => {
                 const valueConfig = config.headers[columnIndex];
 
@@ -93,7 +97,11 @@
             .filter(header => header.unique)
             .forEach(header => {
                 if (_uniqBy(file.data, header.inputName).length !== file.data.length) {
-                    file.inValidMessages.push(header.uniqueErrorMessage);
+                    file.inValidMessages.push(
+                        _isFunction(header.uniqueError)
+                            ? valueConfig.uniqueError(valueConfig.name)
+                            : valueConfig.uniqueError
+                    );
                 }
             });
     };
