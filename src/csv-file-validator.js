@@ -4,7 +4,7 @@
         : typeof define === 'function' && define.amd 
             ? define(['papaparse', 'lodash/uniqBy', 'lodash/isFunction'], factory)
             : (global.myBundle = factory(global.Papa,global._uniqBy,global._isFunction));
-}(this, (function (Papa,_uniqBy,_isFunction) {
+}(this, (function (Papa, _uniqBy, _isFunction) {
     'use strict';
 
     Papa = Papa && Papa.hasOwnProperty('default') ? Papa['default'] : Papa;
@@ -15,7 +15,7 @@
      * @param {File} csvFile 
      * @param {Object} config 
      */
-    function CSVFileValidate (csvFile, config) {
+    function CSVFileValidator (csvFile, config) {
         return new Promise((resolve, reject) => {
             Papa.parse(csvFile, {
                 complete: function(results) {
@@ -53,13 +53,13 @@
                 if (valueConfig.required && !columnValue.length) {
                     file.inValidMessages.push(
                         _isFunction(valueConfig.requiredError)
-                            ? valueConfig.requiredError(rowIndex + 2, columnIndex + 1)
+                            ? valueConfig.requiredError(valueConfig.name, rowIndex + 2, columnIndex + 1)
                             : valueConfig.requiredError
                     );
                 } else if (valueConfig.validate && !valueConfig.validate(columnValue)) {
                     file.inValidMessages.push(
                         _isFunction(valueConfig.validateError)
-                            ? valueConfig.validateError(rowIndex + 2, columnIndex + 1)
+                            ? valueConfig.validateError(valueConfig.name, rowIndex + 2, columnIndex + 1)
                             : valueConfig.validateError
                     );
                 }
@@ -98,5 +98,5 @@
             });
     };
 
-    return CSVFileValidate;
+    return CSVFileValidator;
 })));
