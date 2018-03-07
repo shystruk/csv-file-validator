@@ -32,25 +32,26 @@ Please see **Demo** for more details **/demo/index.html**
 ### CSVFileValidator(file, config) ###
 
 ## file ##
-Type: `File`
+Type: `File` <br>
 
 .csv file
 
 ## config ##
 Type: `Object` <br>
 
-Config object structure should be:
-```javacript
+Config object should contain **headers** array, array of row header (title) objects
+```javascript
 const config = {
     headers: []
 }
 ```
 
-headers array contains row header object with keys
 ### name
+Type: `String` <br>
 name of the row header (title)
 
 ### inputName
+Type: `String` <br>
 key name which will be return with value in a column
 
 ### required
@@ -86,6 +87,8 @@ function(email) {
 ```
 
 ### validateError
+Type: `Function|String` <br>
+
 If validate returns false validateError function will be called with arguments **headerName, rowNumber, columnNumber**
 
 ### isArray
