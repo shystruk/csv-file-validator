@@ -2,7 +2,7 @@
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php) 
 [![codecov](https://codecov.io/gh/shystruk/csv-file-validator/branch/master/graph/badge.svg)](https://codecov.io/gh/shystruk/csv-file-validator)
 [![Build Status](https://travis-ci.org/shystruk/csv-file-validator.svg?branch=master)](https://travis-ci.org/shystruk/csv-file-validator)
-[![npm](https://img.shields.io/npm/v/npm.svg)](https://www.npmjs.com/package/csv-file-validator)
+[![npm version](https://badge.fury.io/js/csv-file-validator.svg)](https://badge.fury.io/js/csv-file-validator)
 
 Validation of CSV file against user defined schema (returns back object with data and invalid messages)
 
@@ -26,16 +26,72 @@ CSVFileValidator(file, config)
     .catch(err => {})
 ```
 
+Please see **Demo** for more details **/demo/index.html**
+
 ## API ##
 ### CSVFileValidator(file, config) ###
 
-#### file ####
+## file ##
 Type: `File`
 
 .csv file
 
-##### config #####
+## config ##
 Type: `Object` <br>
+
+Config object structure should be:
+```javacript
+const config = {
+    headers: []
+}
+```
+
+headers array contains row header object with keys
+### name
+name of the row header (title)
+
+### inputName
+key name which will be return with value in a column
+
+### required
+Type: `Boolean` <br>
+
+If required is true than a column value will be checked if it is not empty
+
+### requiredError
+Type: `Function|String` <br>
+
+If value is empty requiredError function will be called with arguments 
+**headerName, rowNumber, columnNumber**
+
+### unique
+Type: `Boolean` <br>
+
+If it is true all header (title) column values will be checked for uniqueness
+
+### uniqueError
+Type: `Function|String` <br>
+
+If one of the header value is not unique uniqueError function will be called with argument **headerName**
+
+### validate
+Type: `Function` <br>
+
+Validate column value. As an argument column value will be passed
+For e.g. 
+```javascript
+function(email) {
+    return isEmailValid(email)
+} 
+```
+
+### validateError
+If validate returns false validateError function will be called with arguments **headerName, rowNumber, columnNumber**
+
+### isArray
+Type: `Boolean` <br>
+
+If column containes list of values separated by comma in return object it will be as an array
 
 #### Config example ####
 ```javascript
