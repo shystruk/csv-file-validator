@@ -28,6 +28,8 @@ CSVFileValidator(file, config)
 
 Please see **Demo** for more details **/demo/index.html**
 
+![](demo/demo.png)
+
 ## API ##
 ### CSVFileValidator(file, config) ###
 
