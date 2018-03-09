@@ -32,6 +32,7 @@ Please see **Demo** for more details **/demo/index.html**
 
 ## API ##
 ### CSVFileValidator(file, config) ###
+returns the Promise
 
 ## file ##
 Type: `File` <br>
