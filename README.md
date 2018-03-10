@@ -138,3 +138,7 @@ const config = {
     ]
 }
 ```
+
+## License
+
+MIT © [Vasyl Stokolosa](https://about.me/shystruk)
