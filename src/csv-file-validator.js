@@ -1,13 +1,14 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined'
-        ? module.exports = factory(require('papaparse'), require('lodash/uniqBy'), require('lodash/isFunction'))
+        ? module.exports = factory(require('papaparse'), require('lodash/uniqBy'), require('lodash/isFunction'), require('famulus/isValuesUnique'))
         : typeof define === 'function' && define.amd 
-            ? define(['papaparse', 'lodash/uniqBy', 'lodash/isFunction'], factory)
-            : (global.myBundle = factory(global.Papa,global._uniqBy,global._isFunction));
-}(this, (function (Papa, _uniqBy, _isFunction) {
+            ? define(['papaparse', 'lodash/uniqBy', 'lodash/isFunction', 'famulus/isValuesUnique'], factory)
+            : (global.myBundle = factory(global.Papa,global._uniqBy,global._isFunction, global.isValuesUnique));
+}(this, (function (Papa, _uniqBy, _isFunction, isValuesUnique) {
     'use strict';
 
     Papa = Papa && Papa.hasOwnProperty('default') ? Papa['default'] : Papa;
+    isValuesUnique = isValuesUnique && isValuesUnique.hasOwnProperty('default') ? isValuesUnique['default'] : isValuesUnique;
     _uniqBy = _uniqBy && _uniqBy.hasOwnProperty('default') ? _uniqBy['default'] : _uniqBy;
     _isFunction = _isFunction && _isFunction.hasOwnProperty('default') ? _isFunction['default'] : _isFunction;
 
@@ -96,7 +97,7 @@
         config.headers
             .filter(header => header.unique)
             .forEach(header => {
-                if (_uniqBy(file.data, header.inputName).length !== file.data.length) {
+                if (!isValuesUnique(file.data, header.inputName)) {
                     file.inValidMessages.push(
                         _isFunction(header.uniqueError)
                             ? header.uniqueError(header.name)

@@ -58,7 +58,7 @@ test('should validate .csv file and return invalid messages with data', async t 
 
 test('should validate .csv file and return data, file is valid', async t => {
     const csvData = await CSVFileValidator(CSVValidFile, CSVConfig);
-
+    console.log(csvData.inValidMessages)
     t.is(csvData.inValidMessages.length, 0);
     t.is(csvData.data.length, 2);
 });
