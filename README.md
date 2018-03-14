@@ -142,6 +142,7 @@ const config = {
 ## Contributing
 
 Any contributions you make **are greatly appreciated**.
+
 Please read the [Contributions Guidelines](CONTRIBUTING.md) before submitting a PR.
 
 ## License
