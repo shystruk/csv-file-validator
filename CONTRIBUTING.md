@@ -9,7 +9,9 @@ Please feel free to contribute by submitting PR's for improvements to code snipp
 ## Submitting an issue
 
 Found a problem? Have an enhancement? 
+
 First of all see if your issue or idea has already been [reported](https://github.com/shystruk/csv-file-validator/issues).
+
 If do not, open a [new one](https://github.com/shystruk/csv-file-validator/issues/new).
 
 ## Submitting a pull request
