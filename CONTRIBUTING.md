@@ -1,7 +1,9 @@
 # Contributing
 
 ✨ Thank you for contributing ✨
-There are just guideliness
+
+There are just guideliness.
+
 Please feel free to contribute by submitting PR's for improvements to code snippets, explanations, etc.
 
 ## Submitting an issue
