@@ -2,7 +2,7 @@
 
 ✨ Thank you for contributing ✨
 
-There are just guideliness.
+This is just guideliness.
 
 Please feel free to contribute by submitting PR's for improvements to code snippets, explanations, etc.
 
