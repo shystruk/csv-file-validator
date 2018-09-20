@@ -97,7 +97,7 @@ If validate returns false validateError function will be called with arguments *
 ### isArray
 Type: `Boolean` <br>
 
-If column containes list of values separated by comma in return object it will be as an array
+If column contains list of values separated by comma in return object it will be as an array
 
 #### Config example ####
 ```javascript
