@@ -17,7 +17,7 @@
      * @param {Object} config 
      */
     function CSVFileValidator (csvFile, config) {
-        return new Promise((resolve, reject) => {
+        return new Promise(function(resolve, reject) {
             Papa.parse(csvFile, {
                 complete: function(results) {
                     resolve(_prepareDataAndValidateFile(results.data, config));
@@ -41,14 +41,14 @@
         };
 
         csvData.splice(0,1); // skip first row as a header
-        csvData.forEach((row, rowIndex) => {
+        csvData.forEach(function(row, rowIndex) {
             const columnData = {};
 
             if (row.length < config.headers.length) {
                 return;
             }
 
-            row.forEach((columnValue, columnIndex) => {
+            row.forEach(function(columnValue, columnIndex) {
                 const valueConfig = config.headers[columnIndex];
 
                 if (!valueConfig) {
@@ -70,7 +70,9 @@
                 }
 
                 if (valueConfig.isArray) {
-                    columnData[valueConfig.inputName] = columnValue.split(',').map(value => value.trim());
+                    columnData[valueConfig.inputName] = columnValue.split(',').map(function(value) { 
+                        return value.trim();
+                    });
                 } else {
                     columnData[valueConfig.inputName] = columnValue;
                 }
@@ -95,8 +97,10 @@
         }
 
         config.headers
-            .filter(header => header.unique)
-            .forEach(header => {
+            .filter(function(header) {
+                return header.unique
+            })
+            .forEach(function(header) {
                 if (!isValuesUnique(file.data, header.inputName)) {
                     file.inValidMessages.push(
                         _isFunction(header.uniqueError)
