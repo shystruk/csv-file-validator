@@ -16,14 +16,14 @@
      * @param {File} csvFile 
      * @param {Object} config 
      */
-    function CSVFileValidator (csvFile, config) {
+    function CSVFileValidator(csvFile, config) {
         return new Promise(function(resolve, reject) {
             Papa.parse(csvFile, {
                 complete: function(results) {
                     resolve(_prepareDataAndValidateFile(results.data, config));
                 },
                 error: function(error, file) {
-                    reject({error, file});
+                    reject({ error: error, file: file });
                 }
             });
         })
