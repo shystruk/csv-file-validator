@@ -1,7 +1,7 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined'
         ? module.exports = factory(require('papaparse'), require('lodash/uniqBy'), require('lodash/isFunction'), require('famulus/isValuesUnique'))
-        : typeof define === 'function' && define.amd 
+        : typeof define === 'function' && define.amd
             ? define(['papaparse', 'lodash/uniqBy', 'lodash/isFunction', 'famulus/isValuesUnique'], factory)
             : (global.myBundle = factory(global.Papa,global._uniqBy,global._isFunction, global.isValuesUnique));
 }(this, (function (Papa, _uniqBy, _isFunction, isValuesUnique) {
@@ -13,8 +13,8 @@
     _isFunction = _isFunction && _isFunction.hasOwnProperty('default') ? _isFunction['default'] : _isFunction;
 
     /**
-     * @param {File} csvFile 
-     * @param {Object} config 
+     * @param {File} csvFile
+     * @param {Object} config
      */
     function CSVFileValidator(csvFile, config) {
         return new Promise(function(resolve, reject) {
@@ -30,8 +30,8 @@
     }
 
     /**
-     * @param {Array} csvData 
-     * @param {Object} config 
+     * @param {Array} csvData
+     * @param {Object} config
      * @private
      */
     function _prepareDataAndValidateFile(csvData, config) {
@@ -43,8 +43,14 @@
         csvData.splice(0,1); // skip first row as a header
         csvData.forEach(function(row, rowIndex) {
             const columnData = {};
-
-            if (row.length < config.headers.length) {
+            const headers = [];
+            for (var i=0; i<config.headers.length; i++){
+                const data = config.headers[i]
+                if(!data.optional){
+                    headers.push(data)
+                }
+            }
+            if (row.length < headers.length) {
                 return;
             }
 
@@ -69,8 +75,12 @@
                     );
                 }
 
+                if(valueConfig.optional){
+                    columnData[valueConfig.inputName] = columnValue;
+                }
+
                 if (valueConfig.isArray) {
-                    columnData[valueConfig.inputName] = columnValue.split(',').map(function(value) { 
+                    columnData[valueConfig.inputName] = columnValue.split(',').map(function(value) {
                         return value.trim();
                     });
                 } else {
@@ -87,9 +97,9 @@
     }
 
     /**
-     * @param {Object} file 
+     * @param {Object} file
      * @param {Object} config
-     * @private 
+     * @private
      */
     function _checkUniqueFields(file, config) {
         if (!file.data.length) {
