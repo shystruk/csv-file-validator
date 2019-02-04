@@ -43,8 +43,17 @@
         csvData.splice(0,1); // skip first row as a header
         csvData.forEach(function(row, rowIndex) {
             const columnData = {};
+            const headers = [];
 
-            if (row.length < config.headers.length) {
+            for (let i = 0; i < config.headers.length; i++) {
+                const data = config.headers[i];
+
+                if (!data.optional) {
+                    headers.push(data);
+                }
+            }
+
+            if (row.length < headers.length) {
                 return;
             }
 
@@ -67,6 +76,10 @@
                             ? valueConfig.validateError(valueConfig.name, rowIndex + 2, columnIndex + 1)
                             : valueConfig.validateError
                     );
+                }
+
+                if (valueConfig.optional) {
+                    columnData[valueConfig.inputName] = columnValue;
                 }
 
                 if (valueConfig.isArray) {

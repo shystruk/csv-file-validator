@@ -8,7 +8,7 @@ const CSVInvalidFile = `
 
 const CSVValidFile = `
     Vasyl;Stokolosa;v.stokol@gmail.com;123123;admin,manager\n
-    Vasyl;Stokolosa;fake@test.com;123123123;user
+    Vasyl;Stokolosa;fake@test.com;123123123;user;Ukraine
 `;
 
 const requiredError = (headerName, rowNumber, columnNumber) => (
@@ -33,7 +33,8 @@ const CSVConfig = {
         { name: 'Last Name', inputName: 'lastName', required: true, requiredError },
         { name: 'Email', inputName: 'email', required: true, requiredError, unique: true, uniqueError, validate: isEmailValid, validateError },
         { name: 'Password', inputName: 'password', required: true, requiredError, validate: isPasswordValid, validateError },
-        { name: 'Roles', inputName: 'roles', required: true, requiredError, isArray: true }
+        { name: 'Roles', inputName: 'roles', required: true, requiredError, isArray: true },
+        { name: 'Country', inputName: 'country', optional: true }
     ]
 }
 
@@ -58,7 +59,13 @@ test('should validate .csv file and return invalid messages with data', async t 
 
 test('should validate .csv file and return data, file is valid', async t => {
     const csvData = await CSVFileValidator(CSVValidFile, CSVConfig);
-    
+
     t.is(csvData.inValidMessages.length, 0);
     t.is(csvData.data.length, 2);
+});
+
+test('should return optional column', async t => {
+    const csvData = await CSVFileValidator(CSVValidFile, CSVConfig);
+    
+    t.is(csvData.data[1].country, 'Ukraine');
 });

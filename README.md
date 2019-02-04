@@ -62,6 +62,11 @@ Type: `Boolean` <br>
 
 If required is true than a column value will be checked if it is not empty
 
+### optional
+Type: `Boolean` <br>
+
+Makes column optional. If true column value will be return
+
 ### requiredError
 Type: `Function|String` <br>
 
@@ -134,6 +139,11 @@ const config = {
             name: 'Roles',
             inputName: 'roles',
             isArray: true
+        },
+        {
+            name: 'Country',
+            inputName: 'country',
+            optional: true
         }
     ]
 }
