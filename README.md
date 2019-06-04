@@ -57,18 +57,24 @@ name of the row header (title)
 Type: `String` <br>
 key name which will be return with value in a column
 
-### required
-Type: `Boolean` <br>
-
-If required is true than a column value will be checked if it is not empty
-
 ### optional
 Type: `Boolean` <br>
 
 Makes column optional. If true column value will be return
 
+### headerError
+Type: `Function` <br>
+
+If a header name is omitted or is not the same as in config *name* headerError function will be called with arguments 
+**headerName**
+
+### required
+Type: `Boolean` <br>
+
+If required is true than a column value will be checked if it is not empty
+
 ### requiredError
-Type: `Function|String` <br>
+Type: `Function` <br>
 
 If value is empty requiredError function will be called with arguments 
 **headerName, rowNumber, columnNumber**
@@ -79,7 +85,7 @@ Type: `Boolean` <br>
 If it is true all header (title) column values will be checked for uniqueness
 
 ### uniqueError
-Type: `Function|String` <br>
+Type: `Function` <br>
 
 If one of the header value is not unique uniqueError function will be called with argument **headerName**
 
@@ -95,7 +101,7 @@ function(email) {
 ```
 
 ### validateError
-Type: `Function|String` <br>
+Type: `Function` <br>
 
 If validate returns false validateError function will be called with arguments **headerName, rowNumber, columnNumber**
 

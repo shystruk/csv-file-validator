@@ -40,7 +40,6 @@
             data: []
         };
 
-        csvData.splice(0,1); // skip first row as a header
         csvData.forEach(function(row, rowIndex) {
             const columnData = {};
             const headers = [];
@@ -64,17 +63,30 @@
                     return;
                 }
 
+                // header validation
+                if (rowIndex === 0) {
+                    if (valueConfig.name !== columnValue) {
+                        file.inValidMessages.push(
+                            _isFunction(valueConfig.headerError)
+                                ? valueConfig.headerError(columnValue)
+                                : 'Header name ' + columnValue + ' is not correct or missing'
+                        );
+                    }
+
+                    return;
+                }
+
                 if (valueConfig.required && !columnValue.length) {
                     file.inValidMessages.push(
                         _isFunction(valueConfig.requiredError)
-                            ? valueConfig.requiredError(valueConfig.name, rowIndex + 2, columnIndex + 1)
-                            : valueConfig.requiredError
+                            ? valueConfig.requiredError(valueConfig.name, rowIndex + 1, columnIndex + 1)
+                            : String(valueConfig.name + ' is required in the ' + (rowIndex + 1) + ' row / ' + (columnIndex + 1) + ' column')
                     );
                 } else if (valueConfig.validate && !valueConfig.validate(columnValue)) {
                     file.inValidMessages.push(
                         _isFunction(valueConfig.validateError)
-                            ? valueConfig.validateError(valueConfig.name, rowIndex + 2, columnIndex + 1)
-                            : valueConfig.validateError
+                            ? valueConfig.validateError(valueConfig.name, rowIndex + 1, columnIndex + 1)
+                            : String(valueConfig.name + ' is not valid in the ' + (rowIndex + 1) + ' row / ' + (columnIndex + 1) + ' column')
                     );
                 }
 
@@ -118,7 +130,7 @@
                     file.inValidMessages.push(
                         _isFunction(header.uniqueError)
                             ? header.uniqueError(header.name)
-                            : header.uniqueError
+                            : String(header.name + ' is not unique')
                     );
                 }
             });
