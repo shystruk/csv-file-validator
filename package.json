@@ -1,6 +1,6 @@
 {
   "name": "csv-file-validator",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Validation of CSV file against user defined schema (returns back object with data and invalid messages)",
   "main": "./src/csv-file-validator.js",
   "repository": "https://github.com/shystruk/csv-file-validator.git",
