@@ -1341,11 +1341,12 @@ extsprintf@^1.2.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
 
-famulus@^1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/famulus/-/famulus-1.3.1.tgz#9e49c57c87ac474851bc1df1267590d653abc49d"
+famulus@2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/famulus/-/famulus-2.1.2.tgz#9b5a091a6c1969fea97bfd8e00e747e852efeb8a"
+  integrity sha512-UjfF9lOEP6IFLC/DTwUe5KbCYINbuYYJS+mivlnWyK8yqt/9WYHrJ4RihZ0pa9HVxQObu8IWroJOyyt8dXCVkw==
   dependencies:
-    lodash "^4.17.4"
+    lodash "^4.17.15"
 
 fast-diff@^1.1.1:
   version "1.1.2"
@@ -2297,7 +2298,7 @@ lodash.merge@^4.6.0:
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
 
-lodash@^4.17.12:
+lodash@4.17.15, lodash@^4.17.15:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
