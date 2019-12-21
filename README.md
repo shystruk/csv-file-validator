@@ -2,6 +2,7 @@
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php) 
 [![codecov](https://codecov.io/gh/shystruk/csv-file-validator/branch/master/graph/badge.svg)](https://codecov.io/gh/shystruk/csv-file-validator)
 [![Build Status](https://travis-ci.org/shystruk/csv-file-validator.svg?branch=master)](https://travis-ci.org/shystruk/csv-file-validator)
+![Snyk Vulnerabilities for GitHub Repo](https://img.shields.io/snyk/vulnerabilities/github/shystruk/csv-file-validator)
 [![npm version](https://badge.fury.io/js/csv-file-validator.svg)](https://badge.fury.io/js/csv-file-validator)
 
 Validation of CSV file against user defined schema (returns back object with data and invalid messages)
