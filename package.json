@@ -30,7 +30,7 @@
   "dependencies": {
     "famulus": "2.1.2",
     "lodash": "4.17.15",
-    "papaparse": "^4.3.7"
+    "papaparse": "^5.2.0"
   },
   "devDependencies": {
     "ava": "^0.25.0",
