@@ -31,7 +31,7 @@ document.getElementById('file').onchange = function(event) {
     CSVFileValidator(event.target.files[0], CSVConfig)
         .then(csvData => {
             csvData.inValidMessages.forEach(message => {
-                document.getElementById('invalidMessages').insertAdjacentHTML( 'beforeend', message )
+                document.getElementById('invalidMessages').insertAdjacentHTML('beforeend', message)
             })
             console.log(csvData.inValidMessages)
             console.log(csvData.data)
