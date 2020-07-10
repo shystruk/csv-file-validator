@@ -29,7 +29,7 @@
   "license": "MIT",
   "dependencies": {
     "famulus": "2.1.2",
-    "lodash": "4.17.15",
+    "lodash": "4.17.16",
     "papaparse": "^5.2.0"
   },
   "devDependencies": {
