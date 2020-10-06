@@ -1,7 +1,7 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined'
         ? module.exports = factory(require('papaparse'), require('lodash/uniqBy'), require('lodash/isFunction'), require('famulus/isValuesUnique'))
-        : typeof define === 'function' && define.amd 
+        : typeof define === 'function' && define.amd
             ? define(['papaparse', 'lodash/uniqBy', 'lodash/isFunction', 'famulus/isValuesUnique'], factory)
             : (global.myBundle = factory(global.Papa,global._uniqBy,global._isFunction, global.isValuesUnique));
 }(this, (function (Papa, _uniqBy, _isFunction, isValuesUnique) {
@@ -13,8 +13,8 @@
     _isFunction = _isFunction && _isFunction.hasOwnProperty('default') ? _isFunction['default'] : _isFunction;
 
     /**
-     * @param {File} csvFile 
-     * @param {Object} config 
+     * @param {File} csvFile
+     * @param {Object} config
      */
     function CSVFileValidator(csvFile, config) {
         return new Promise(function(resolve, reject) {
@@ -30,8 +30,8 @@
     }
 
     /**
-     * @param {Array} csvData 
-     * @param {Object} config 
+     * @param {Array} csvData
+     * @param {Object} config
      * @private
      */
     function _prepareDataAndValidateFile(csvData, config) {
@@ -65,15 +65,19 @@
 
                 // header validation
                 if (rowIndex === 0) {
-                    if (valueConfig.name !== columnValue) {
-                        file.inValidMessages.push(
-                            _isFunction(valueConfig.headerError)
-                                ? valueConfig.headerError(columnValue)
-                                : 'Header name ' + columnValue + ' is not correct or missing'
-                        );
+                    if (config.nameOfTheRowOptional && valueConfig.name === columnValue) {
+                        return;
                     }
-
-                    return;
+                    if (!config.nameOfTheRowOptional) {
+                        if (valueConfig.name !== columnValue) {
+                            file.inValidMessages.push(
+                                _isFunction(valueConfig.headerError)
+                                    ? valueConfig.headerError(columnValue)
+                                    : 'Header name ' + columnValue + ' is not correct or missing'
+                            );
+                        }
+                        return;
+                    }
                 }
 
                 if (valueConfig.required && !columnValue.length) {
@@ -95,7 +99,7 @@
                 }
 
                 if (valueConfig.isArray) {
-                    columnData[valueConfig.inputName] = columnValue.split(',').map(function(value) { 
+                    columnData[valueConfig.inputName] = columnValue.split(',').map(function(value) {
                         return value.trim();
                     });
                 } else {
@@ -103,7 +107,9 @@
                 }
             });
 
-            file.data.push(columnData);
+            if (Object.keys(columnData).length) {
+                file.data.push(columnData);
+            }
         });
 
         _checkUniqueFields(file, config);
@@ -112,9 +118,9 @@
     }
 
     /**
-     * @param {Object} file 
+     * @param {Object} file
      * @param {Object} config
-     * @private 
+     * @private
      */
     function _checkUniqueFields(file, config) {
         if (!file.data.length) {
