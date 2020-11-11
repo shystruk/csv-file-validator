@@ -19,6 +19,7 @@
     function CSVFileValidator(csvFile, config) {
         return new Promise(function(resolve, reject) {
             Papa.parse(csvFile, {
+                skipEmptyLines: true,
                 complete: function(results) {
                     resolve(_prepareDataAndValidateFile(results.data, config));
                 },
