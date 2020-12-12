@@ -5,7 +5,7 @@
 	"main": "./src/csv-file-validator.js",
 	"repository": "https://github.com/shystruk/csv-file-validator.git",
 	"publishConfig": {
-		"registry": "https://npm.pkg.github.com"
+		"registry": "https://registry.npmjs.org"
 	},
 	"directories": {
 		"src": "src"
