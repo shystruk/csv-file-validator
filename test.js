@@ -15,7 +15,7 @@ const isEmailValid = (email) => {
 }
 
 const isPasswordValid = (password) => (password.length >= 4)
-const uniqueError = (headerName) => (`<div class="red">${headerName} is not unique</div>`)
+const uniqueError = (headerName, rowNumber) => (`<div class="red">${headerName} is not unique at ${rowNumber}</div>`)
 
 const CSVConfig = {
 	headers: [
@@ -44,6 +44,12 @@ const CSVValidFile = [
 
 const CSVValidFileWithoutHeaders = [
 	'Vasyl;Stokolosa;v.stokol@gmail.com;123123;admin,manager',
+	'Vasyl;Stokolosa;fake@test.com;123123123;user;Ukraine',
+].join('\n');
+
+const CSVInvalidFileWithDuplicateEmailId = [
+	CSVHeader,
+	'Vasyl;Stokolosa;fake@test.com;123123;admin,manager',
 	'Vasyl;Stokolosa;fake@test.com;123123123;user;Ukraine',
 ].join('\n');
 
@@ -98,4 +104,12 @@ test('should return optional column', async t => {
 	const csvData = await CSVFileValidator(CSVValidFile, CSVConfig);
 
 	t.is(csvData.data[1].country, 'Ukraine');
+});
+
+
+test('should validate .csv file and return invalid message with data, file is valid and Email is not unique at 2', async t => {
+    const csvData = await CSVFileValidator(CSVInvalidFileWithDuplicateEmailId, CSVConfig);
+
+    t.is(csvData.inValidMessages.length, 1);
+    t.is(csvData.data.length, 2);
 });
