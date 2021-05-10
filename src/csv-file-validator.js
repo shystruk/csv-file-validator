@@ -126,24 +126,34 @@
 	 * @private
 	 */
 	function _checkUniqueFields(file, config) {
-		if (!file.data.length) {
-			return;
-		}
+  if (!file.data.length) {
+    return;
+  }
 
-		config.headers
-			.filter(function (header) {
-				return header.unique
-			})
-			.forEach(function (header) {
-				if (!isValuesUnique(file.data, header.inputName)) {
-					file.inValidMessages.push(
-						_isFunction(header.uniqueError)
-							? header.uniqueError(header.name)
-							: String(header.name + ' is not unique')
-					);
-				}
-			});
-	};
+  config.headers
+    .filter(function (header) {
+      return header.unique;
+    })
+    .forEach(function (header) {
+      if (!isValuesUnique(file.data, header.inputName)) {
+        var duplicates = [];
+        file.data.forEach((row, index) => {
+          var rowPropertyValue = row[header.inputName];
+          if (duplicates.indexOf(rowPropertyValue) >= 0) {
+            file.inValidMessages.push(
+              _isFunction(header.uniqueError)
+                ? header.uniqueError(header.name, index + 1)
+                : String(index + 1 + ":" + rowPropertyValue + " is not unique")
+            );
+          } else {
+            duplicates.push(rowPropertyValue);
+          }
+        });
+        duplicates = [];
+      }
+    });
+}
+
 
 	return CSVFileValidator;
 })));
