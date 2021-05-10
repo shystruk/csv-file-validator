@@ -1,40 +1,43 @@
 {
-  "name": "csv-file-validator",
-  "version": "1.9.0",
-  "description": "Validation of CSV file against user defined schema (returns back object with data and invalid messages)",
-  "main": "./src/csv-file-validator.js",
-  "repository": "https://github.com/shystruk/csv-file-validator.git",
-  "directories": {
-    "src": "src"
-  },
-  "scripts": {
-    "report-coverage": "cat ./coverage/lcov.info | codecov",
-    "coverage": "nyc report --reporter=lcov",
-    "test": "nyc ava --browser && npm run coverage"
-  },
-  "keywords": [
-    "csv parser",
-    "parser",
-    "validator",
-    "csv validator",
-    "csv file validator",
-    "reviewer",
-    "csv reviewer"
-  ],
-  "author": {
-    "name": "Vasyl Stokolosa",
-    "email": "v.stokol@gmail.com",
-    "url": "https://github.com/shystruk"
-  },
-  "license": "MIT",
-  "dependencies": {
-    "famulus": "^2.2.0",
-    "lodash": "^4.17.20",
-    "papaparse": "^5.3.0"
-  },
-  "devDependencies": {
-    "ava": "^0.25.0",
-    "codecov.io": "^0.1.6",
-    "nyc": "^11.4.1"
-  }
+	"name": "csv-file-validator",
+	"version": "1.10.1",
+	"description": "Validation of CSV file against user defined schema (returns back object with data and invalid messages)",
+	"main": "./src/csv-file-validator.js",
+	"repository": "https://github.com/shystruk/csv-file-validator.git",
+	"publishConfig": {
+		"registry": "https://registry.npmjs.org"
+	},
+	"directories": {
+		"src": "src"
+	},
+	"scripts": {
+		"report-coverage": "cat ./coverage/lcov.info | codecov",
+		"coverage": "nyc report --reporter=lcov",
+		"test": "nyc ava --browser && npm run coverage"
+	},
+	"keywords": [
+		"csv parser",
+		"parser",
+		"validator",
+		"csv validator",
+		"csv file validator",
+		"reviewer",
+		"csv reviewer"
+	],
+	"author": {
+		"name": "Vasyl Stokolosa",
+		"email": "v.stokol@gmail.com",
+		"url": "https://github.com/shystruk"
+	},
+	"license": "MIT",
+	"dependencies": {
+		"famulus": "^2.2.0",
+		"lodash": "^4.17.20",
+		"papaparse": "^5.3.0"
+	},
+	"devDependencies": {
+		"ava": "^0.25.0",
+		"codecov.io": "^0.1.6",
+		"nyc": "^11.4.1"
+	}
 }
