@@ -143,7 +143,7 @@
             file.inValidMessages.push(
               _isFunction(header.uniqueError)
                 ? header.uniqueError(header.name, index + 1)
-                : String(rowPropertyValue + " is not unique at "+ (index + 1))
+                : String(header.name + " is not unique at "+ (index + 1))
             );
           } else {
             duplicates.push(rowPropertyValue);
