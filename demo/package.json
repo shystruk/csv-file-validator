@@ -12,5 +12,9 @@
     "email": "v.stokol@gmail.com",
     "url": "https://github.com/shystruk"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "^5.37.0",
+    "webpack-cli": "^4.7.0"
+  }
 }

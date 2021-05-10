@@ -132,18 +132,30 @@
 
 		config.headers
 			.filter(function (header) {
-				return header.unique
+				return header.unique;
 			})
 			.forEach(function (header) {
 				if (!isValuesUnique(file.data, header.inputName)) {
-					file.inValidMessages.push(
-						_isFunction(header.uniqueError)
-							? header.uniqueError(header.name)
-							: String(header.name + ' is not unique')
-					);
+					const duplicates = [];
+
+					file.data.forEach((row, rowIndex) => {
+						var value = row[header.inputName];
+
+						if (duplicates.indexOf(value) >= 0) {
+							file.inValidMessages.push(
+								_isFunction(header.uniqueError)
+									? header.uniqueError(header.name, rowIndex + 1)
+									: String(
+										header.name + " is not unique at the " + (rowIndex + 1) + "row"
+									)
+							);
+						} else {
+							duplicates.push(value);
+						}
+					});
 				}
 			});
-	};
+	}
 
 	return CSVFileValidator;
 })));
