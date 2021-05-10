@@ -126,34 +126,36 @@
 	 * @private
 	 */
 	function _checkUniqueFields(file, config) {
-  if (!file.data.length) {
-    return;
-  }
+		if (!file.data.length) {
+			return;
+		}
 
-  config.headers
-    .filter(function (header) {
-      return header.unique;
-    })
-    .forEach(function (header) {
-      if (!isValuesUnique(file.data, header.inputName)) {
-        var duplicates = [];
-        file.data.forEach((row, index) => {
-          var rowPropertyValue = row[header.inputName];
-          if (duplicates.indexOf(rowPropertyValue) >= 0) {
-            file.inValidMessages.push(
-              _isFunction(header.uniqueError)
-                ? header.uniqueError(header.name, index + 1)
-                : String(header.name + " is not unique at "+ (index + 1))
-            );
-          } else {
-            duplicates.push(rowPropertyValue);
-          }
-        });
-        duplicates = [];
-      }
-    });
-}
+		config.headers
+			.filter(function (header) {
+				return header.unique;
+			})
+			.forEach(function (header) {
+				if (!isValuesUnique(file.data, header.inputName)) {
+					const duplicates = [];
 
+					file.data.forEach((row, rowIndex) => {
+						var value = row[header.inputName];
+
+						if (duplicates.indexOf(value) >= 0) {
+							file.inValidMessages.push(
+								_isFunction(header.uniqueError)
+									? header.uniqueError(header.name, rowIndex + 1)
+									: String(
+										header.name + " is not unique at the " + (rowIndex + 1) + "row"
+									)
+							);
+						} else {
+							duplicates.push(value);
+						}
+					});
+				}
+			});
+	}
 
 	return CSVFileValidator;
 })));
