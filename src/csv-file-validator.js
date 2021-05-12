@@ -144,9 +144,9 @@
 						if (duplicates.indexOf(value) >= 0) {
 							file.inValidMessages.push(
 								_isFunction(header.uniqueError)
-									? header.uniqueError(header.name, rowIndex + 1)
+									? header.uniqueError(header.name, rowIndex + 2)
 									: String(
-										header.name + " is not unique at the " + (rowIndex + 1) + "row"
+										header.name + " is not unique at the " + (rowIndex + 2) + "row"
 									)
 							);
 						} else {
