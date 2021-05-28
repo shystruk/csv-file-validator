@@ -74,8 +74,9 @@
 						if (valueConfig.name !== columnValue) {
 							file.inValidMessages.push(
 								_isFunction(valueConfig.headerError)
-									? valueConfig.headerError(columnValue)
-									: 'Header name ' + columnValue + ' is not correct or missing'
+									? valueConfig.headerError(columnValue, valueConfig.name, rowIndex + 1, columnIndex + 1)
+									: 'Header name ' + columnValue + ' is not correct or missing in the ' + (rowIndex + 1) + ' row / '
+										+ (columnIndex + 1) + ' column. The Header name should be ' + valueConfig.name
 							);
 						}
 
