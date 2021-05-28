@@ -20,7 +20,7 @@ const isPasswordValid = function (password) {
 const CSVConfig = {
 	headers: [
 		{ name: 'First Name', inputName: 'firstName', required: true, requiredError },
-		{ name: 'Last Name', inputName: 'lastName', required: true, requiredError },
+		{ name: 'Last Name', inputName: 'lastName', required: true, requiredError, optional: true },
 		{ name: 'Email', inputName: 'email', required: true, requiredError, unique: true, uniqueError, validate: isEmailValid, validateError },
 		{ name: 'Password', inputName: 'password', required: true, requiredError, validate: isPasswordValid, validateError },
 		{ name: 'Roles', inputName: 'roles', required: true, requiredError, isArray: true }
