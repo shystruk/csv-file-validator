@@ -18,6 +18,13 @@
 	 */
 	function CSVFileValidator(csvFile, config) {
 		return new Promise(function (resolve, reject) {
+			if (!config || (config && !config.headers)) {
+				return resolve({
+					inValidMessages: ['config headers are required'],
+					data: []
+				});
+			}
+
 			Papa.parse(csvFile, {
 				skipEmptyLines: true,
 				complete: function (results) {
@@ -36,23 +43,22 @@
 	 * @private
 	 */
 	function _prepareDataAndValidateFile(csvData, config) {
+		const headers = [];
 		const file = {
 			inValidMessages: [],
 			data: []
 		};
 
+		for (let i = 0; i < config.headers.length; i++) {
+			if (!config.headers[i].optional) {
+				headers.push(config.headers[i]);
+			}
+		}
+
 		csvData.forEach(function (row, rowIndex) {
 			const columnData = {};
-			const headers = [];
 
-			for (let i = 0; i < config.headers.length; i++) {
-				const data = config.headers[i];
-
-				if (!data.optional) {
-					headers.push(data);
-				}
-			}
-
+			// Skip the row if not enough columns or .csv formatting is wrong
 			if (row.length < headers.length) {
 				return;
 			}
