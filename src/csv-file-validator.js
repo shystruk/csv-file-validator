@@ -43,24 +43,20 @@
 	 * @private
 	 */
 	function _prepareDataAndValidateFile(csvData, config) {
-		const headers = [];
 		const file = {
 			inValidMessages: [],
 			data: []
 		};
 
-		for (let i = 0; i < config.headers.length; i++) {
-			if (!config.headers[i].optional) {
-				headers.push(config.headers[i]);
-			}
-		}
-
 		csvData.forEach(function (row, rowIndex) {
 			const columnData = {};
 
-			// Skip the row if not enough columns or .csv formatting is wrong
-			if (row.length < headers.length) {
-				return;
+			// fields are mismatch
+			if (rowIndex !== 0 && row.length > config.headers.length) {
+				file.inValidMessages.push(
+					'Too many fields: expected ' + config.headers.length + ' fields' +
+					' but parsed ' + row.length + '. In the row ' + rowIndex
+				);
 			}
 
 			row.forEach(function (columnValue, columnIndex) {
