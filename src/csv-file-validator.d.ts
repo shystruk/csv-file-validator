@@ -1,48 +1,47 @@
 // Type definitions for csv-file-validator 1.10
 // Project: https://github.com/shystruk/csv-file-validator
-// Definitions by: Javier Rojo <https://github.com/javierlinked>
+// Definitions by: Igor Levkov <https://github.com/igors-levkovs>
 /// <reference types="node" />
 
-declare namespace CSVFileValidator {
-	export function CSVFileValidator<T = any>(
-		file: string | File | NodeJS.ReadableStream,
-		config: ICSVFile
-	): Promise<ParseResult<T>>;
-
-	interface ICSVFile {
-		isHeaderNameOptional?: boolean;
-		headers: ICSVField[];
-	}
-
-	interface ICSVField {
-		name: string;
-		inputName: string;
-		unique?: boolean;
-		required?: boolean;
-		isArray?: boolean;
-
-		//callbacks
-		uniqueError?(headerName: string): string;
-		validate?(value: string): any;
-		validateError?(headerName: string, rowNumber: string, columnNumber: string): string;
-	}
-
-	interface ParseResult<T> {
-		inValidMessages: ParseError[];
-		data: T[];
-	}
-
-	interface ParseError {
-		type: string; // A generalization of the error
-		code: string; // Standardized error code
-		message: string; // Human-readable details
-		row: number; // Row index of parsed data where error is
-	}
+export interface FieldSchema<Error = string> {
+	/** Name of the row header (title) */
+	name: string;
+	/** Key name which will be return with value in a column */
+	inputName: string;
+	/** Makes column optional. If true column value will be return */
+	optional?: boolean;
+	/** If required is true than a column value will be checked if it is not empty */
+	required: boolean;
+	/** If it is true all header (title) column values will be checked for uniqueness */
+	unique?: boolean;
+	/** If column contains list of values separated by comma in return object it will be as an array */
+	isArray?: boolean;
+	/** If a header name is omitted or is not the same as in config name headerError function will be called with arguments headerName */
+	headerError?: (headerValue: string, headerName: string, rowNumber: number, columnNumber: number) => Error;
+	/** If value is empty requiredError function will be called with arguments headerName, rowNumber, columnNumber */
+	requiredError?: (headerName: string, rowNumber: number, columnNumber: number) => Error;
+	/** If one of the header value is not unique uniqueError function will be called with argument headerName */
+	uniqueError?: (headerName: string, rowNumber: number) => Error;
+	/** Validate column value. Must return true for valid field and false for invalid */
+	validate?: (field: string) => boolean;
+	/** If validate returns false validateError function will be called with arguments headerName, rowNumber, columnNumber */
+	validateError?: (headerName: string, rowNumber: number, columnNumber: number) => Error;
 }
 
-declare function CSVFileValidator<T = any>(
-	file: string | File | NodeJS.ReadableStream,
-	config: CSVFileValidator.ICSVFile
-): Promise<CSVFileValidator.ParseResult<T>>;
+export interface ParsedResults<Row = any, Error = string> {
+	/** Array of parsed CSV entries */
+	data: Row[];
+	/** List of validation error messages */
+	inValidMessages: Error[];
+}
 
-export = CSVFileValidator;
+/** CSV File Validator configuration */
+export interface ValidatorConfig<Error = string> {
+	headers: FieldSchema<Error>[];
+	isHeaderNameOptional?: boolean;
+}
+
+export default function CSVFileValidator<Row = any, Error = string>(
+	csv: string | File | NodeJS.ReadableStream,
+	config: ValidatorConfig<Error>
+): Promise<ParsedResults<Row, Error>>;
