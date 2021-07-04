@@ -1,6 +1,6 @@
 {
 	"name": "csv-file-validator",
-	"version": "1.10.4",
+	"version": "1.11.0",
 	"description": "Validation of CSV file against user defined schema (returns back object with data and invalid messages)",
 	"main": "./src/csv-file-validator.js",
 	"types": "./src/csv-file-validator.d.ts",
