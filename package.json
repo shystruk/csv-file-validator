@@ -1,8 +1,9 @@
 {
 	"name": "csv-file-validator",
-	"version": "1.10.4",
+	"version": "1.11.0",
 	"description": "Validation of CSV file against user defined schema (returns back object with data and invalid messages)",
 	"main": "./src/csv-file-validator.js",
+	"types": "./src/csv-file-validator.d.ts",
 	"repository": "https://github.com/shystruk/csv-file-validator.git",
 	"publishConfig": {
 		"registry": "https://registry.npmjs.org"
@@ -31,9 +32,10 @@
 	},
 	"license": "MIT",
 	"dependencies": {
-		"famulus": "^2.2.0",
-		"lodash": "^4.17.20",
-		"papaparse": "^5.3.0"
+		"@types/papaparse": "^5.2.5",
+		"famulus": "^2.2.3",
+		"lodash": "^4.17.21",
+		"papaparse": "^5.3.1"
 	},
 	"devDependencies": {
 		"ava": "^0.25.0",
