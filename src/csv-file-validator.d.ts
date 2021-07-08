@@ -3,8 +3,8 @@
 // Definitions by: Javier Rojo <https://github.com/javierlinked>
 /// <reference types="node" />
 
-declare namespace CSVFileValidator {
-	export function CSVFileValidator<T = any>(
+declare module 'csv-file-validator' {
+	function CSVFileValidator<T = any>(
 		file: string | File | NodeJS.ReadableStream,
 		config: ICSVFile
 	): Promise<ParseResult<T>>;
@@ -39,10 +39,3 @@ declare namespace CSVFileValidator {
 		row: number; // Row index of parsed data where error is
 	}
 }
-
-declare function CSVFileValidator<T = any>(
-	file: string | File | NodeJS.ReadableStream,
-	config: CSVFileValidator.ICSVFile
-): Promise<CSVFileValidator.ParseResult<T>>;
-
-export = CSVFileValidator;
