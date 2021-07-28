@@ -54,9 +54,14 @@ const CSVInvalidFileWithDuplicates = [
 	'Vasyl;Stokolosa;fake@test.com;123123123;user;Ukraine',
 ].join('\n');
 
-const CSVInvalidFileFieldsMismatch = [
+const CSVInvalidFileTooManyFields = [
 	'First Name;',
 	'Vasyl;Stokolosa;',
+].join('\n');
+
+const CSVInvalidFileNotEnoughFields = [
+	'First Name;LastName;',
+	'Vasyl;',
 ].join('\n');
 
 test('module should be a function', t => {
@@ -127,8 +132,15 @@ test('file is valid and Email is not unique at the ... row', async t => {
 	t.is(csvData.data.length, 3);
 });
 
-test('fields are mismatch', async t => {
-	const csvData = await CSVFileValidator(CSVInvalidFileFieldsMismatch, { headers: [CSVConfig.headers[0]] });
+test('fields are mismatch: too many fields', async t => {
+	const csvData = await CSVFileValidator(CSVInvalidFileTooManyFields, { headers: [CSVConfig.headers[0]] });
+
+	t.is(csvData.inValidMessages.length, 1);
+	t.is(csvData.data.length, 1);
+});
+
+test('fields are mismatch: not enough fields', async t => {
+	const csvData = await CSVFileValidator(CSVInvalidFileNotEnoughFields, { headers: [CSVConfig.headers[0], CSVConfig.headers[1]] });
 
 	t.is(csvData.inValidMessages.length, 1);
 	t.is(csvData.data.length, 1);
