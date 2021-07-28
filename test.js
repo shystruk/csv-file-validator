@@ -32,13 +32,13 @@ const CSVHeader = CSVConfig.headers.map(i => i.name).join(';');
 
 const CSVInvalidFile = [
 	CSVHeader,
-	'Vasyl;Stokolosa;v.stokol@gmail.com;123;admin,manager',
-	'Vasyl_2;"";v.stokol@gmail.com;123123123;user',
+	'Vasyl;Stokolosa;v.stokol@gmail.com;123;admin,manager;',
+	'Vasyl_2;"";v.stokol@gmail.com;123123123;user;',
 ].join('\n');
 
 const CSVValidFile = [
 	CSVHeader,
-	'Vasyl;Stokolosa;v.stokol@gmail.com;123123;admin,manager',
+	'Vasyl;Stokolosa;v.stokol@gmail.com;123123;admin,manager;',
 	'Vasyl;Stokolosa;fake@test.com;123123123;user;Ukraine',
 ].join('\n');
 
@@ -49,14 +49,20 @@ const CSVValidFileWithoutHeaders = [
 
 const CSVInvalidFileWithDuplicates = [
 	CSVHeader,
-	'Vasyl;Stokolosa;fake@test.com;123123;admin,manager',
+	'Vasyl;Stokolosa;fake@test.com;123123;admin,manager;',
 	'Vasyl;Stokolosa;fake@test.com;123123123;user;Ukraine',
 	'Vasyl;Stokolosa;fake@test.com;123123123;user;Ukraine',
 ].join('\n');
 
-const CSVInvalidFileFieldsMismatch = [
+const CSVInvalidFileTooManyFields = [
 	'First Name;',
 	'Vasyl;Stokolosa;',
+].join('\n');
+
+const CSVInvalidFileNotEnoughFields = [
+	'Country;First Name;Last Name;',
+	'"";Vasyl',
+	'"";Vasyl;Stokolosa',
 ].join('\n');
 
 test('module should be a function', t => {
@@ -127,9 +133,18 @@ test('file is valid and Email is not unique at the ... row', async t => {
 	t.is(csvData.data.length, 3);
 });
 
-test('fields are mismatch', async t => {
-	const csvData = await CSVFileValidator(CSVInvalidFileFieldsMismatch, { headers: [CSVConfig.headers[0]] });
+test('fields are mismatch: too many fields', async t => {
+	const csvData = await CSVFileValidator(CSVInvalidFileTooManyFields, { headers: [CSVConfig.headers[0]] });
 
 	t.is(csvData.inValidMessages.length, 1);
+	t.is(csvData.inValidMessages[0], "Number of fields mismatch: expected 1 fields but parsed 3. In the row 1")
 	t.is(csvData.data.length, 1);
+});
+
+test('fields are mismatch: not enough fields', async t => {
+	const csvData = await CSVFileValidator(CSVInvalidFileNotEnoughFields, { headers: [CSVConfig.headers[5], CSVConfig.headers[0], CSVConfig.headers[1]] });
+
+	t.is(csvData.inValidMessages.length, 1);
+	t.is(csvData.inValidMessages[0], "Number of fields mismatch: expected 3 fields but parsed 2. In the row 1");
+	t.is(csvData.data.length, 2);
 });
