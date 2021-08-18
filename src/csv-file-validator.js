@@ -26,6 +26,7 @@
 			}
 
 			Papa.parse(csvFile, {
+				...config.parserConfig,
 				skipEmptyLines: true,
 				complete: function (results) {
 					resolve(_prepareDataAndValidateFile(results.data, config));
@@ -59,7 +60,8 @@
 				);
 			}
 
-			row.forEach(function (columnValue, columnIndex) {
+			row.forEach(function (columnValueRaw, columnIndex) {
+				const columnValue = columnValueRaw.replace(/^\ufeff/, '') // Strip BOM character
 				const valueConfig = config.headers[columnIndex];
 
 				if (!valueConfig) {
@@ -86,7 +88,7 @@
 					}
 				}
 
-				if (valueConfig.required && !columnValue.length) {
+				if (valueConfig.required && (columnValue === undefined || (typeof columnValue === 'string' && !columnValue.length))) {
 					file.inValidMessages.push(
 						_isFunction(valueConfig.requiredError)
 							? valueConfig.requiredError(valueConfig.name, rowIndex + 1, columnIndex + 1)

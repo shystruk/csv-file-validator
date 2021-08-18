@@ -115,6 +115,14 @@ Type: `Boolean` <br>
 
 If column contains list of values separated by comma in return object it will be as an array
 
+### parserConfig
+Type: `Object` <br>
+
+Optional field to pass custom configuration to underlying papaparse parser. Default options, which can't be overridden:
+**skipEmptyLines**, **complete** and **error**
+
+For available options please check  [papaparse](https://www.papaparse.com/docs#config) documentation
+
 #### Config example ####
 ```javascript
 const config = {
@@ -156,7 +164,14 @@ const config = {
             inputName: 'country',
             optional: true
         }
-    ]
+    ],
+    parserConfig: {
+        transform: (value, field) => {
+            if (field === 2) {
+                return value.toLocaleLowerCase();
+            }
+        },
+    }
 }
 ```
 
