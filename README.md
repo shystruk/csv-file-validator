@@ -71,7 +71,7 @@ Makes column optional. If true column value will be return
 Type: `Function` <br>
 
 If a header name is omitted or is not the same as in config *name* headerError function will be called with arguments
-**headerName**
+**headerValue, headerName, rowNumber, columnNumber**
 
 ### required
 Type: `Boolean` <br>
@@ -92,7 +92,7 @@ If it is true all header (title) column values will be checked for uniqueness
 ### uniqueError
 Type: `Function` <br>
 
-If one of the header value is not unique uniqueError function will be called with argument **headerName**
+If one of the header value is not unique uniqueError function will be called with argument **headerName, rowNumber**
 
 ### validate
 Type: `Function` <br>
