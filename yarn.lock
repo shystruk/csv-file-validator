@@ -59,6 +59,18 @@
     pretty-ms "^0.2.1"
     text-table "^0.2.0"
 
+"@types/node@*":
+  version "16.6.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.6.2.tgz#331b7b9f8621c638284787c5559423822fdffc50"
+  integrity sha512-LSw8TZt12ZudbpHc6EkIyDM3nHVWKYrAvGy6EAJfNfjusbwnThqjqxUKKRwuV3iWYeW/LYMzNgaq3MaLffQ2xA==
+
+"@types/papaparse@^5.2.6":
+  version "5.2.6"
+  resolved "https://registry.yarnpkg.com/@types/papaparse/-/papaparse-5.2.6.tgz#0bba18de4d15eff65883bc7c0794e0134de9e7c7"
+  integrity sha512-xGKSd0UTn58N1h0+zf8mW863Rv8BvXcGibEgKFtBIXZlcDXAmX/T4RdDO2mwmrmOypUDt5vRgo2v32a78JdqUA==
+  dependencies:
+    "@types/node" "*"
+
 ansi-align@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ansi-align/-/ansi-align-2.0.0.tgz#c36aeccba563b89ceb556f3690f0b1d9e3547f7f"
@@ -1435,10 +1447,10 @@ extglob@^2.0.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-famulus@^2.2.0:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/famulus/-/famulus-2.2.2.tgz#0bb0a962407b79d2a271beb2192b8e1ca7edc0eb"
-  integrity sha512-tobqs8uC0OomrMN/cX7aUUj3OSJn5y2GCfcTleCrtIfjxUkl6kJFLovnyEWfD6M+cQ1ZXhE5BaTJzMoDibbodA==
+famulus@^2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/famulus/-/famulus-2.2.3.tgz#b895c67930d0a0055257e2c1933ab9522dd694a5"
+  integrity sha512-tEh0NlWBtXSu1t/uY1eN7DQbXXcezPUp2/q25Scbc0h+Wivu9GHcdVnzlOqhD6hetpaj9CMhRm5InSQscM7FWQ==
   dependencies:
     lodash "^4.17.20"
 
@@ -2450,7 +2462,7 @@ lodash.merge@^4.6.0:
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
 
-lodash@^4.17.20, lodash@^4.17.4:
+lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.4:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -2928,10 +2940,10 @@ package-json@^4.0.0:
     registry-url "^3.0.3"
     semver "^5.1.0"
 
-papaparse@^5.3.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/papaparse/-/papaparse-5.3.0.tgz#ab1702feb96e79ab4309652f36db9536563ad05a"
-  integrity sha512-Lb7jN/4bTpiuGPrYy4tkKoUS8sTki8zacB5ke1p5zolhcSE4TlWgrlsxjrDTbG/dFVh07ck7X36hUf/b5V68pg==
+papaparse@^5.3.1:
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/papaparse/-/papaparse-5.3.1.tgz#770b7a9124d821d4b2132132b7bd7dce7194b5b1"
+  integrity sha512-Dbt2yjLJrCwH2sRqKFFJaN5XgIASO9YOFeFP8rIBRG2Ain8mqk5r1M6DkfvqEVozVcz3r3HaUGw253hA1nLIcA==
 
 parse-glob@^3.0.4:
   version "3.0.4"
@@ -3001,9 +3013,9 @@ path-key@^2.0.0:
   integrity sha1-QRyttXTFoUDTpLGRDUDYDMn0C0A=
 
 path-parse@^1.0.5, path-parse@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.6.tgz#d62dbb5679405d72c4737ec58600e9ddcf06d24c"
-  integrity sha512-GSmOT2EbHrINBf9SR7CDELwlJ8AENk3Qn7OikK4nFYAu3Ote2+JYNVvkpAEQm3/TLNEJFD/xZJjzyxg3KBWOzw==
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.7.tgz#fbc114b60ca42b30d9daf5858e4bd68bbedb6735"
+  integrity sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==
 
 path-type@^1.0.0:
   version "1.1.0"
