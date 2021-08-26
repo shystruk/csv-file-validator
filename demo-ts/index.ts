@@ -3,16 +3,20 @@ import CSVFileValidator, { ParsedResults, ValidatorConfig } from '../src/csv-fil
 const requiredError = (headerName: string, rowNumber: number, columnNumber: number) => {
 	return `<div class="red">${headerName} is required in the <strong>${rowNumber} row</strong> / <strong>${columnNumber} column</strong></div>`
 }
+
 const validateError = (headerName: string, rowNumber: number, columnNumber: number) => {
 	return `<div class="red">${headerName} is not valid in the <strong>${rowNumber} row</strong> / <strong>${columnNumber} column</strong></div>`
 }
+
 const uniqueError = (headerName: string, rowNumber: number) => {
 	return `<div class="red">${headerName} is not unique at the <strong>${rowNumber} row</strong></div>`
 }
+
 const isEmailValid = function (email: string) {
 	const reqExp = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$/
 	return reqExp.test(email)
 }
+
 const isPasswordValid = function (password: string) {
 	return password.length >= 4
 }
