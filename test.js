@@ -94,14 +94,14 @@ test('should return data, the file is valid', async t => {
 });
 
 test('file without headers, the file is valid and headers are optional', async t => {
-	const csvData = await CSVFileValidator(CSVValidFileWithoutHeaders, {...CSVConfig, isHeaderNameOptional: true});
+	const csvData = await CSVFileValidator(CSVValidFileWithoutHeaders, { ...CSVConfig, isHeaderNameOptional: true });
 
 	t.is(csvData.inValidMessages.length, 0);
 	t.is(csvData.data.length, 2);
 });
 
 test('file with headers, the file is valid and headers are optional', async t => {
-	const csvData = await CSVFileValidator(CSVValidFile, {...CSVConfig, isHeaderNameOptional: true});
+	const csvData = await CSVFileValidator(CSVValidFile, { ...CSVConfig, isHeaderNameOptional: true });
 
 	t.is(csvData.inValidMessages.length, 0);
 	t.is(csvData.data.length, 2);
@@ -128,7 +128,7 @@ test('file is valid and Email is not unique at the ... row', async t => {
 });
 
 test('fields are mismatch', async t => {
-	const csvData = await CSVFileValidator(CSVInvalidFileFieldsMismatch, {headers: [CSVConfig.headers[0]]});
+	const csvData = await CSVFileValidator(CSVInvalidFileFieldsMismatch, { headers: [CSVConfig.headers[0]] });
 
 	t.is(csvData.inValidMessages.length, 1);
 	t.is(csvData.data.length, 1);
