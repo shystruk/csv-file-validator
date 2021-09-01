@@ -1,15 +1,14 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined'
-		? module.exports = factory(require('papaparse'), require('lodash/uniqBy'), require('lodash/isFunction'), require('famulus/isValuesUnique'))
+		? module.exports = factory(require('papaparse'), require('lodash/isFunction'), require('famulus/isValuesUnique'))
 		: typeof define === 'function' && define.amd
-			? define(['papaparse', 'lodash/uniqBy', 'lodash/isFunction', 'famulus/isValuesUnique'], factory)
-			: (global.myBundle = factory(global.Papa, global._uniqBy, global._isFunction, global.isValuesUnique));
-}(this, (function (Papa, _uniqBy, _isFunction, isValuesUnique) {
+			? define(['papaparse', 'lodash/isFunction', 'famulus/isValuesUnique'], factory)
+			: (global.myBundle = factory(global.Papa, global._isFunction, global.isValuesUnique));
+}(this, (function (Papa, _isFunction, isValuesUnique) {
 	'use strict';
 
 	Papa = Papa && Papa.hasOwnProperty('default') ? Papa['default'] : Papa;
 	isValuesUnique = isValuesUnique && isValuesUnique.hasOwnProperty('default') ? isValuesUnique['default'] : isValuesUnique;
-	_uniqBy = _uniqBy && _uniqBy.hasOwnProperty('default') ? _uniqBy['default'] : _uniqBy;
 	_isFunction = _isFunction && _isFunction.hasOwnProperty('default') ? _isFunction['default'] : _isFunction;
 
 	/**
@@ -26,6 +25,7 @@
 			}
 
 			Papa.parse(csvFile, {
+				...config.parserConfig,
 				skipEmptyLines: true,
 				complete: function (results) {
 					resolve(_prepareDataAndValidateFile(results.data, config));
@@ -61,6 +61,9 @@
 
 			row.forEach(function (columnValue, columnIndex) {
 				const valueConfig = config.headers[columnIndex];
+
+				// Remove BOM character
+				columnValue = columnValue.replace(/^\ufeff/g, '');
 
 				if (!valueConfig) {
 					return;
@@ -142,7 +145,7 @@
 					const duplicates = [];
 
 					file.data.forEach((row, rowIndex) => {
-						var value = row[header.inputName];
+						const value = row[header.inputName];
 
 						if (duplicates.indexOf(value) >= 0) {
 							file.inValidMessages.push(

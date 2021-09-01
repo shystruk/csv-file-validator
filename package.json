@@ -1,6 +1,6 @@
 {
 	"name": "csv-file-validator",
-	"version": "1.11.0",
+	"version": "1.11.1",
 	"description": "Validation of CSV file against user defined schema (returns back object with data and invalid messages)",
 	"main": "./src/csv-file-validator.js",
 	"types": "./src/csv-file-validator.d.ts",
@@ -14,7 +14,7 @@
 	"scripts": {
 		"report-coverage": "cat ./coverage/lcov.info | codecov",
 		"coverage": "nyc report --reporter=lcov",
-		"test": "nyc ava --browser && npm run coverage"
+		"test": "nyc ava --browser && npm run coverage && tsd"
 	},
 	"keywords": [
 		"csv parser",
@@ -40,6 +40,7 @@
 		"@types/papaparse": "^5.2.6",
 		"ava": "^0.25.0",
 		"codecov.io": "^0.1.6",
-		"nyc": "^11.4.1"
+		"nyc": "^11.4.1",
+		"tsd": "^0.17.0"
 	}
 }
