@@ -52,9 +52,9 @@
 			const columnData = {};
 
 			// fields are mismatch
-			if (rowIndex !== 0 && row.length > config.headers.length) {
+			if (rowIndex !== 0 && row.length !== config.headers.length) {
 				file.inValidMessages.push(
-					'Too many fields: expected ' + config.headers.length + ' fields' +
+					'Number of fields mismatch: expected ' + config.headers.length + ' fields' +
 					' but parsed ' + row.length + '. In the row ' + rowIndex
 				);
 			}
