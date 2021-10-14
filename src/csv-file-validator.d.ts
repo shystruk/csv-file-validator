@@ -1,5 +1,7 @@
 /// <reference types="node" />
 
+import { ParseConfig } from "papaparse";
+
 export interface FieldSchema {
 	/** Name of the row header (title) */
 	name: string;
@@ -47,6 +49,7 @@ export interface ParsedResults<Row = any, Error = string> {
 export interface ValidatorConfig {
 	headers: FieldSchema[];
 	isHeaderNameOptional?: boolean;
+	parserConfig?: ParseConfig;
 }
 
 export default function CSVFileValidator<Row = any, Error = string>(
