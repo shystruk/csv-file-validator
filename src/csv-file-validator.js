@@ -1,3 +1,4 @@
+const fs = require('fs'); 
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined'
 		? module.exports = factory(require('papaparse'), require('lodash/isFunction'), require('famulus/isValuesUnique'))
@@ -15,7 +16,7 @@
 	 * @param {File} csvFile
 	 * @param {Object} config
 	 */
-	function CSVFileValidator(csvFile, config) {
+	function CSVFileValidator(csvFile, config, customArray) {
 		return new Promise(function (resolve, reject) {
 			if (!config || (config && !config.headers)) {
 				return resolve({
@@ -23,8 +24,8 @@
 					data: []
 				});
 			}
-
-			Papa.parse(csvFile, {
+		const content = fs.readFileSync(csvFile.path, "utf8");
+			Papa.parse(content, {
 				...config.parserConfig,
 				skipEmptyLines: true,
 				complete: function (results) {
