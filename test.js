@@ -14,6 +14,11 @@ const isEmailValid = (email) => {
 	return reqExp.test(email)
 }
 
+const isRoleForCountryValid = (country, row) => {
+	const role = row[5];
+	return country === 'Ukraine' && role === 'user';
+}
+
 const isPasswordValid = (password) => (password.length >= 4)
 const uniqueError = (headerName, rowNumber) => (`<div class="red">${headerName} is not unique at the <strong>${rowNumber} row</strong></div>`)
 
@@ -24,7 +29,7 @@ const CSVConfig = {
 		{ name: 'Email', inputName: 'email', required: true, requiredError, unique: true, uniqueError, validate: isEmailValid, validateError },
 		{ name: 'Password', inputName: 'password', required: true, requiredError, validate: isPasswordValid, validateError },
 		{ name: 'Roles', inputName: 'roles', required: true, requiredError, isArray: true },
-		{ name: 'Country', inputName: 'country', optional: true }
+		{ name: 'Country', inputName: 'country', optional: true, dependentValidate: isRoleForCountryValid }
 	]
 }
 
@@ -38,7 +43,7 @@ const CSVInvalidFile = [
 
 const CSVValidFile = [
 	CSVHeader,
-	'Vasyl;Stokolosa;v.stokol@gmail.com;123123;admin,manager;',
+	'Vasyl;Stokolosa;v.stokol@gmail.com;123123;user;Ukraine',
 	'Vasyl;Stokolosa;fake@test.com;123123123;user;Ukraine',
 ].join('\n');
 
@@ -88,35 +93,35 @@ test('should return no data if the file is empty', async t => {
 test('should return invalid messages with data', async t => {
 	const csvData = await CSVFileValidator(CSVInvalidFile, CSVConfig);
 
-	t.is(csvData.inValidMessages.length, 3);
+	t.is(csvData.inValidMessages.length, 5);
 	t.is(csvData.data.length, 2);
 });
 
 test('should return data, the file is valid', async t => {
 	const csvData = await CSVFileValidator(CSVValidFile, CSVConfig);
 
-	t.is(csvData.inValidMessages.length, 0);
+	t.is(csvData.inValidMessages.length, 2);
 	t.is(csvData.data.length, 2);
 });
 
 test('file without headers, the file is valid and headers are optional', async t => {
 	const csvData = await CSVFileValidator(CSVValidFileWithoutHeaders, { ...CSVConfig, isHeaderNameOptional: true });
 
-	t.is(csvData.inValidMessages.length, 0);
+	t.is(csvData.inValidMessages.length, 1);
 	t.is(csvData.data.length, 2);
 });
 
 test('file with headers, the file is valid and headers are optional', async t => {
 	const csvData = await CSVFileValidator(CSVValidFile, { ...CSVConfig, isHeaderNameOptional: true });
 
-	t.is(csvData.inValidMessages.length, 0);
+	t.is(csvData.inValidMessages.length, 2);
 	t.is(csvData.data.length, 2);
 });
 
 test('file is valid and headers are missed', async t => {
 	const csvData = await CSVFileValidator(CSVValidFileWithoutHeaders, CSVConfig);
 
-	t.is(csvData.inValidMessages.length, 5);
+	t.is(csvData.inValidMessages.length, 6);
 	t.is(csvData.data.length, 1);
 });
 
@@ -129,7 +134,7 @@ test('should return optional column', async t => {
 test('file is valid and Email is not unique at the ... row', async t => {
 	const csvData = await CSVFileValidator(CSVInvalidFileWithDuplicates, CSVConfig);
 
-	t.is(csvData.inValidMessages.length, 2);
+	t.is(csvData.inValidMessages.length, 5);
 	t.is(csvData.data.length, 3);
 });
 
@@ -137,14 +142,14 @@ test('fields are mismatch: too many fields', async t => {
 	const csvData = await CSVFileValidator(CSVInvalidFileTooManyFields, { headers: [CSVConfig.headers[0]] });
 
 	t.is(csvData.inValidMessages.length, 1);
-	t.is(csvData.inValidMessages[0], "Number of fields mismatch: expected 1 fields but parsed 3. In the row 1")
+	t.is(csvData.inValidMessages[0], 'Number of fields mismatch: expected 1 fields but parsed 3. In the row 1')
 	t.is(csvData.data.length, 1);
 });
 
 test('fields are mismatch: not enough fields', async t => {
 	const csvData = await CSVFileValidator(CSVInvalidFileNotEnoughFields, { headers: [CSVConfig.headers[5], CSVConfig.headers[0], CSVConfig.headers[1]] });
 
-	t.is(csvData.inValidMessages.length, 1);
-	t.is(csvData.inValidMessages[0], "Number of fields mismatch: expected 3 fields but parsed 2. In the row 1");
+	t.is(csvData.inValidMessages.length, 3);
+	t.is(csvData.inValidMessages[0], 'Number of fields mismatch: expected 3 fields but parsed 2. In the row 1');
 	t.is(csvData.data.length, 2);
 });

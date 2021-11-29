@@ -62,8 +62,7 @@
 			row.forEach(function (columnValue, columnIndex) {
 				const valueConfig = config.headers[columnIndex];
 
-				// Remove BOM character
-				columnValue = columnValue.replace(/^\ufeff/g, '');
+				columnValue = _clearValue(columnValue);
 
 				if (!valueConfig) {
 					return;
@@ -79,9 +78,11 @@
 						if (valueConfig.name !== columnValue) {
 							file.inValidMessages.push(
 								_isFunction(valueConfig.headerError)
-									? valueConfig.headerError(columnValue, valueConfig.name, rowIndex + 1, columnIndex + 1)
-									: 'Header name ' + columnValue + ' is not correct or missing in the ' + (rowIndex + 1) + ' row / '
-										+ (columnIndex + 1) + ' column. The Header name should be ' + valueConfig.name
+									? valueConfig.headerError(
+										columnValue, valueConfig.name, rowIndex + 1, columnIndex + 1
+									)
+									: `Header name ${columnValue} is not correct or missing in the ${rowIndex + 1} row/
+										${columnIndex + 1} column. The Header name should be ${valueConfig.name}`
 							);
 						}
 
@@ -93,13 +94,23 @@
 					file.inValidMessages.push(
 						_isFunction(valueConfig.requiredError)
 							? valueConfig.requiredError(valueConfig.name, rowIndex + 1, columnIndex + 1)
-							: String(valueConfig.name + ' is required in the ' + (rowIndex + 1) + ' row / ' + (columnIndex + 1) + ' column')
+							: String(`${valueConfig.name} is required in the ${rowIndex + 1} row/
+								${columnIndex + 1} column`)
 					);
 				} else if (valueConfig.validate && !valueConfig.validate(columnValue)) {
 					file.inValidMessages.push(
 						_isFunction(valueConfig.validateError)
 							? valueConfig.validateError(valueConfig.name, rowIndex + 1, columnIndex + 1)
-							: String(valueConfig.name + ' is not valid in the ' + (rowIndex + 1) + ' row / ' + (columnIndex + 1) + ' column')
+							: String(`${valueConfig.name} is not valid in the ${rowIndex + 1} row/
+								${columnIndex + 1} column`)
+					);
+				} else if (valueConfig.dependentValidate &&
+					!valueConfig.dependentValidate(columnValue, _getClearRow(row))) {
+					file.inValidMessages.push(
+						_isFunction(valueConfig.validateError)
+							? valueConfig.validateError(valueConfig.name, rowIndex + 1, columnIndex + 1)
+							: String(`${valueConfig.name} not passed dependent validation in the ${rowIndex + 1} row/
+								${columnIndex + 1} column`)
 					);
 				}
 
@@ -108,9 +119,7 @@
 				}
 
 				if (valueConfig.isArray) {
-					columnData[valueConfig.inputName] = columnValue.split(',').map(function (value) {
-						return value.trim();
-					});
+					columnData[valueConfig.inputName] = columnValue.split(',').map(value => value.trim());
 				} else {
 					columnData[valueConfig.inputName] = columnValue;
 				}
@@ -151,9 +160,7 @@
 							file.inValidMessages.push(
 								_isFunction(header.uniqueError)
 									? header.uniqueError(header.name, rowIndex + 2)
-									: String(
-										header.name + " is not unique at the " + (rowIndex + 2) + "row"
-									)
+									: String(`${header.name} is not unique at the ${rowIndex + 2} row`)
 							);
 						} else {
 							duplicates.push(value);
@@ -161,6 +168,25 @@
 					});
 				}
 			});
+	}
+
+	/**
+	 * @param {Array<string>} row
+	 * @private
+	 * @return {Array}
+	 */
+	function _getClearRow(row) {
+		return row.map(columnValue => _clearValue(columnValue));
+	}
+
+	/**
+	 * Remove BOM character
+	 * @param {String} value
+	 * @private
+	 * @return {String}
+	 */
+	function _clearValue(value) {
+		return value.replace(/^\ufeff/g, '');
 	}
 
 	return CSVFileValidator;
