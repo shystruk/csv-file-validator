@@ -1,6 +1,6 @@
 /// <reference types="node" />
 
-import { ParseConfig } from "papaparse";
+import { ParseConfig } from 'papaparse';
 
 export interface FieldSchema {
 	/** Name of the row header (title) */
@@ -18,26 +18,50 @@ export interface FieldSchema {
 	/** If it is true all header (title) column values will be checked for uniqueness */
 	unique?: boolean;
 
-	/** If column contains list of values separated by comma in return object it will be as an array */
+	/**
+	 * If column contains list of values separated by comma in return
+	 * object it will be as an array.
+	 */
 	isArray?: boolean;
 
-	/** If a header name is omitted or is not the same as in config name headerError function will be called with arguments headerName */
-	headerError?: (headerValue: string, headerName: string, rowNumber: number, columnNumber: number) => string;
+	/**
+	 * If a header name is omitted or is not the same as in config name
+	 * headerError function will be called with arguments headerName.
+	 */
+	headerError?: (headerValue: string, headerName: string, rowNumber: number,
+				   columnNumber: number) => string;
 
-	/** If value is empty requiredError function will be called with arguments headerName, rowNumber, columnNumber */
-	requiredError?: (headerName: string, rowNumber: number, columnNumber: number) => string;
+	/**
+	 * If value is empty requiredError function will be called with
+	 * arguments headerName, rowNumber, columnNumber.
+	 */
+	requiredError?: (headerName: string, rowNumber: number,
+					 columnNumber: number) => string;
 
-	/** If one of the header value is not unique uniqueError function will be called with argument headerName */
+	/**
+	 * If one of the header value is not unique uniqueError function
+	 * will be called with argument headerName.
+	 */
 	uniqueError?: (headerName: string, rowNumber: number) => string;
 
-	/** Validate column value. Must return true for valid field and false for invalid */
+	/**
+	 * Validate column value.
+	 * Must return true for valid field and false for invalid.
+	 */
 	validate?: (field: string) => boolean;
 
-	/** Validate column value that depends on other values in other columns. Must return true for valid field and false for invalid */
-	dependentValidate?: (field: string, row: {[column:string]: string}) => boolean;
+	/**
+	 * Validate column value that depends on other values in other columns.
+	 * Must return true for valid field and false for invalid.
+	 */
+	dependentValidate?: (field: string, row: [string]) => boolean;
 
-	/** If validate returns false validateError function will be called with arguments headerName, rowNumber, columnNumber */
-	validateError?: (headerName: string, rowNumber: number, columnNumber: number) => string;
+	/**
+	 * If validate returns false validateError function
+	 * will be called with arguments headerName, rowNumber, columnNumber.
+	 */
+	validateError?: (headerName: string, rowNumber: number,
+					 columnNumber: number) => string;
 }
 
 export interface ParsedResults<Row = any, Error = string> {

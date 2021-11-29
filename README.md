@@ -102,8 +102,12 @@ Type: `Function` <br>
 Validate column value. As an argument column value will be passed
 For e.g.
 ```javascript
+/**
+ * @param {String} email
+ * @return {Boolean}
+ */
 function(email) {
-    return isEmailValid(email)
+    return isEmailValid(email);
 }
 ```
 
@@ -111,6 +115,24 @@ function(email) {
 Type: `Function` <br>
 
 If validate returns false validateError function will be called with arguments **headerName, rowNumber, columnNumber**
+
+
+### dependentValidate
+Type: `Function` <br>
+
+Validate column value that depends on other values in other columns.
+As an argument column value and row will be passed.
+For e.g.
+```javascript
+/**
+ * @param {String} email
+ * @param {Array<string>} row
+ * @return {Boolean}
+ */
+function(email, row) {
+    return isEmailDependsOnSomeDataInRow(email, row);
+}
+```
 
 ### isArray
 Type: `Boolean` <br>
@@ -156,7 +178,10 @@ const config = {
         {
             name: 'Country',
             inputName: 'country',
-            optional: true
+            optional: true,
+            dependentValidate: function(email, row) {
+                return isEmailDependsOnSomeDataInRow(email, row);
+            }
         }
     ]
 }
