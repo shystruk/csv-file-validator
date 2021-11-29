@@ -50,7 +50,7 @@
 
 		csvData.forEach(function (row, rowIndex) {
 			const columnData = {};
-
+			const rowFormattedForUser = formatCsvRowForPassingToUser(row)
 			// fields are mismatch
 			if (rowIndex !== 0 && row.length !== config.headers.length) {
 				file.inValidMessages.push(
@@ -101,6 +101,12 @@
 							? valueConfig.validateError(valueConfig.name, rowIndex + 1, columnIndex + 1)
 							: String(valueConfig.name + ' is not valid in the ' + (rowIndex + 1) + ' row / ' + (columnIndex + 1) + ' column')
 					);
+				} else if (valueConfig.dependentValidate && !valueConfig.dependentValidate(columnValue, rowFormattedForUser)){
+					file.inValidMessages.push(
+						_isFunction(valueConfig.validateError)
+							? valueConfig.validateError(valueConfig.name, rowIndex + 1, columnIndex + 1)
+							: String(valueConfig.name + ' is not valid in the ' + (rowIndex + 1) + ' row / ' + (columnIndex + 1) + ' column')
+					)
 				}
 
 				if (valueConfig.optional) {
@@ -124,6 +130,15 @@
 		_checkUniqueFields(file, config);
 
 		return file;
+	}
+
+	/**
+	 * 
+	 * @param {Array} row 
+	 * @returns 
+	 */
+	function formatCsvRowForPassingToUser(row){
+		return row.map((columnValue) => columnValue.replace(/^\ufeff/g, ''))
 	}
 
 	/**
