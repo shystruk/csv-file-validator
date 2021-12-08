@@ -78,11 +78,9 @@
 						if (valueConfig.name !== columnValue) {
 							file.inValidMessages.push(
 								_isFunction(valueConfig.headerError)
-									? valueConfig.headerError(
-										columnValue, valueConfig.name, rowIndex + 1, columnIndex + 1
-									)
-									: `Header name ${columnValue} is not correct or missing in the ${rowIndex + 1} row/
-										${columnIndex + 1} column. The Header name should be ${valueConfig.name}`
+									? valueConfig.headerError(columnValue, valueConfig.name, rowIndex + 1, columnIndex + 1)
+									: 'Header name ' + columnValue + ' is not correct or missing in the ' + (rowIndex + 1) + ' row / '
+										+ (columnIndex + 1) + ' column. The Header name should be ' + valueConfig.name
 							);
 						}
 
@@ -94,23 +92,20 @@
 					file.inValidMessages.push(
 						_isFunction(valueConfig.requiredError)
 							? valueConfig.requiredError(valueConfig.name, rowIndex + 1, columnIndex + 1)
-							: String(`${valueConfig.name} is required in the ${rowIndex + 1} row/
-								${columnIndex + 1} column`)
+							: String(valueConfig.name + ' is required in the ' + (rowIndex + 1) + ' row / ' + (columnIndex + 1) + ' column')
 					);
 				} else if (valueConfig.validate && !valueConfig.validate(columnValue)) {
 					file.inValidMessages.push(
 						_isFunction(valueConfig.validateError)
 							? valueConfig.validateError(valueConfig.name, rowIndex + 1, columnIndex + 1)
-							: String(`${valueConfig.name} is not valid in the ${rowIndex + 1} row/
-								${columnIndex + 1} column`)
+							: String(valueConfig.name + ' is not valid in the ' + (rowIndex + 1) + ' row / ' + (columnIndex + 1) + ' column')
 					);
 				} else if (valueConfig.dependentValidate &&
 					!valueConfig.dependentValidate(columnValue, _getClearRow(row))) {
 					file.inValidMessages.push(
 						_isFunction(valueConfig.validateError)
 							? valueConfig.validateError(valueConfig.name, rowIndex + 1, columnIndex + 1)
-							: String(`${valueConfig.name} not passed dependent validation in the ${rowIndex + 1} row/
-								${columnIndex + 1} column`)
+							: String(valueConfig.name + ' not passed dependent validation in the ' + (rowIndex + 1) + ' row / ' + (columnIndex + 1) + ' column')
 					);
 				}
 
