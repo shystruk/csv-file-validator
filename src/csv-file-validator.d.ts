@@ -64,7 +64,13 @@ export interface FieldSchema {
 					 columnNumber: number) => string;
 }
 
-export interface ParsedResults<Row = any, Error = string> {
+export interface RowError {
+   rowIndex?: number;
+   columnIndex?: number;
+   message: string;
+}
+
+export interface ParsedResults<Row = any, Error = RowError> {
 	/** Array of parsed CSV entries */
 	data: Row[];
 
@@ -79,7 +85,7 @@ export interface ValidatorConfig {
 	parserConfig?: ParseConfig;
 }
 
-export default function CSVFileValidator<Row = any, Error = string>(
+export default function CSVFileValidator<Row = any, Error = RowError>(
 	csv: string | File | NodeJS.ReadableStream,
 	config: ValidatorConfig
 ): Promise<ParsedResults<Row, Error>>;

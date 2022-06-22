@@ -1,15 +1,32 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined'
-		? module.exports = factory(require('papaparse'), require('lodash/isFunction'), require('famulus/isValuesUnique'))
-		: typeof define === 'function' && define.amd
-			? define(['papaparse', 'lodash/isFunction', 'famulus/isValuesUnique'], factory)
-			: (global.myBundle = factory(global.Papa, global._isFunction, global.isValuesUnique));
-}(this, (function (Papa, _isFunction, isValuesUnique) {
-	'use strict';
+	typeof exports === "object" && typeof module !== "undefined"
+		? (module.exports = factory(
+			require("papaparse"),
+			require("lodash/isFunction"),
+			require("famulus/isValuesUnique")
+		))
+		: typeof define === "function" && define.amd
+			? define(
+				["papaparse", "lodash/isFunction", "famulus/isValuesUnique"],
+				factory
+			)
+			: (global.myBundle = factory(
+				global.Papa,
+				global._isFunction,
+				global.isValuesUnique
+			));
+})(this, function (Papa, _isFunction, isValuesUnique) {
+	"use strict";
 
-	Papa = Papa && Papa.hasOwnProperty('default') ? Papa['default'] : Papa;
-	isValuesUnique = isValuesUnique && isValuesUnique.hasOwnProperty('default') ? isValuesUnique['default'] : isValuesUnique;
-	_isFunction = _isFunction && _isFunction.hasOwnProperty('default') ? _isFunction['default'] : _isFunction;
+	Papa = Papa && Papa.hasOwnProperty("default") ? Papa["default"] : Papa;
+	isValuesUnique =
+		isValuesUnique && isValuesUnique.hasOwnProperty("default")
+			? isValuesUnique["default"]
+			: isValuesUnique;
+	_isFunction =
+		_isFunction && _isFunction.hasOwnProperty("default")
+			? _isFunction["default"]
+			: _isFunction;
 
 	/**
 	 * @param {File} csvFile
@@ -19,8 +36,8 @@
 		return new Promise(function (resolve, reject) {
 			if (!config || (config && !config.headers)) {
 				return resolve({
-					inValidMessages: ['config headers are required'],
-					data: []
+					inValidMessages: [{ message: "config headers are required" }],
+					data: [],
 				});
 			}
 
@@ -32,9 +49,9 @@
 				},
 				error: function (error, file) {
 					reject({ error: error, file: file });
-				}
+				},
 			});
-		})
+		});
 	}
 
 	/**
@@ -45,7 +62,7 @@
 	function _prepareDataAndValidateFile(csvData, config) {
 		const file = {
 			inValidMessages: [],
-			data: []
+			data: [],
 		};
 
 		csvData.forEach(function (row, rowIndex) {
@@ -53,10 +70,18 @@
 
 			// fields are mismatch
 			if (rowIndex !== 0 && row.length !== config.headers.length) {
-				file.inValidMessages.push(
-					'Number of fields mismatch: expected ' + config.headers.length + ' fields' +
-					' but parsed ' + row.length + '. In the row ' + rowIndex
-				);
+				file.inValidMessages.push({
+					rowIndex,
+					columnIndex: undefined,
+					message:
+						"Number of fields mismatch: expected " +
+						config.headers.length +
+						" fields" +
+						" but parsed " +
+						row.length +
+						". In the row " +
+						rowIndex,
+				});
 			}
 
 			row.forEach(function (columnValue, columnIndex) {
@@ -70,18 +95,35 @@
 
 				// header validation, skip if isHeaderNameOptional
 				if (rowIndex === 0) {
-					if (config.isHeaderNameOptional && valueConfig.name === columnValue) {
+					if (
+						config.isHeaderNameOptional &&
+						valueConfig.name === columnValue
+					) {
 						return;
 					}
 
 					if (!config.isHeaderNameOptional) {
 						if (valueConfig.name !== columnValue) {
-							file.inValidMessages.push(
-								_isFunction(valueConfig.headerError)
-									? valueConfig.headerError(columnValue, valueConfig.name, rowIndex + 1, columnIndex + 1)
-									: 'Header name ' + columnValue + ' is not correct or missing in the ' + (rowIndex + 1) + ' row / '
-										+ (columnIndex + 1) + ' column. The Header name should be ' + valueConfig.name
-							);
+							const error = {
+								rowIndex,
+								columnIndex,
+								message: _isFunction(valueConfig.headerError)
+									? valueConfig.headerError(
+										columnValue,
+										valueConfig.name,
+										rowIndex + 1,
+										columnIndex + 1
+									)
+									: "Header name " +
+									columnValue +
+									" is not correct or missing in the " +
+									(rowIndex + 1) +
+									" row / " +
+									(columnIndex + 1) +
+									" column. The Header name should be " +
+									valueConfig.name,
+							};
+							file.inValidMessages.push(error);
 						}
 
 						return;
@@ -89,24 +131,74 @@
 				}
 
 				if (valueConfig.required && !columnValue.length) {
-					file.inValidMessages.push(
-						_isFunction(valueConfig.requiredError)
-							? valueConfig.requiredError(valueConfig.name, rowIndex + 1, columnIndex + 1)
-							: String(valueConfig.name + ' is required in the ' + (rowIndex + 1) + ' row / ' + (columnIndex + 1) + ' column')
-					);
-				} else if (valueConfig.validate && !valueConfig.validate(columnValue)) {
-					file.inValidMessages.push(
-						_isFunction(valueConfig.validateError)
-							? valueConfig.validateError(valueConfig.name, rowIndex + 1, columnIndex + 1)
-							: String(valueConfig.name + ' is not valid in the ' + (rowIndex + 1) + ' row / ' + (columnIndex + 1) + ' column')
-					);
-				} else if (valueConfig.dependentValidate &&
-					!valueConfig.dependentValidate(columnValue, _getClearRow(row))) {
-					file.inValidMessages.push(
-						_isFunction(valueConfig.validateError)
-							? valueConfig.validateError(valueConfig.name, rowIndex + 1, columnIndex + 1)
-							: String(valueConfig.name + ' not passed dependent validation in the ' + (rowIndex + 1) + ' row / ' + (columnIndex + 1) + ' column')
-					);
+					const error = {
+						rowIndex,
+						columnIndex,
+						message: _isFunction(valueConfig.requiredError)
+							? valueConfig.requiredError(
+								valueConfig.name,
+								rowIndex + 1,
+								columnIndex + 1
+							)
+							: String(
+								valueConfig.name +
+								" is required in the " +
+								(rowIndex + 1) +
+								" row / " +
+								(columnIndex + 1) +
+								" column"
+							),
+					};
+					file.inValidMessages.push(error);
+				} else if (
+					valueConfig.validate &&
+					!valueConfig.validate(columnValue)
+				) {
+					const error = {
+						rowIndex,
+						columnIndex,
+						message: _isFunction(valueConfig.validateError)
+							? valueConfig.validateError(
+								valueConfig.name,
+								rowIndex + 1,
+								columnIndex + 1
+							)
+							: String(
+								valueConfig.name +
+								" is not valid in the " +
+								(rowIndex + 1) +
+								" row / " +
+								(columnIndex + 1) +
+								" column"
+							),
+					};
+					file.inValidMessages.push(error);
+				} else if (
+					valueConfig.dependentValidate &&
+					!valueConfig.dependentValidate(
+						columnValue,
+						_getClearRow(row)
+					)
+				) {
+					const error = {
+						rowIndex,
+						columnIndex,
+						message: _isFunction(valueConfig.validateError)
+							? valueConfig.validateError(
+								valueConfig.name,
+								rowIndex + 1,
+								columnIndex + 1
+							)
+							: String(
+								valueConfig.name +
+								" not passed dependent validation in the " +
+								(rowIndex + 1) +
+								" row / " +
+								(columnIndex + 1) +
+								" column"
+							),
+					};
+					file.inValidMessages.push(error);
 				}
 
 				if (valueConfig.optional) {
@@ -114,7 +206,9 @@
 				}
 
 				if (valueConfig.isArray) {
-					columnData[valueConfig.inputName] = columnValue.split(',').map(value => value.trim());
+					columnData[valueConfig.inputName] = columnValue
+						.split(",")
+						.map((value) => value.trim());
 				} else {
 					columnData[valueConfig.inputName] = columnValue;
 				}
@@ -144,7 +238,7 @@
 			.filter(function (header) {
 				return header.unique;
 			})
-			.forEach(function (header) {
+			.forEach(function (header, columnIndex) {
 				if (!isValuesUnique(file.data, header.inputName)) {
 					const duplicates = [];
 
@@ -152,11 +246,21 @@
 						const value = row[header.inputName];
 
 						if (duplicates.indexOf(value) >= 0) {
-							file.inValidMessages.push(
-								_isFunction(header.uniqueError)
-									? header.uniqueError(header.name, rowIndex + 2)
-									: String(`${header.name} is not unique at the ${rowIndex + 2} row`)
-							);
+							const error = {
+								rowIndex,
+								columnIndex,
+								message: _isFunction(header.uniqueError)
+									? header.uniqueError(
+										header.name,
+										rowIndex + 2
+									)
+									: String(
+										`${header.name
+										} is not unique at the ${rowIndex + 2
+										} row`
+									),
+							};
+							file.inValidMessages.push(error);
 						} else {
 							duplicates.push(value);
 						}
@@ -171,7 +275,7 @@
 	 * @return {Array}
 	 */
 	function _getClearRow(row) {
-		return row.map(columnValue => _clearValue(columnValue));
+		return row.map((columnValue) => _clearValue(columnValue));
 	}
 
 	/**
@@ -181,8 +285,8 @@
 	 * @return {String}
 	 */
 	function _clearValue(value) {
-		return value.replace(/^\ufeff/g, '');
+		return value.replace(/^\ufeff/g, "");
 	}
 
 	return CSVFileValidator;
-})));
+});
