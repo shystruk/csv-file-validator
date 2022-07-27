@@ -78,7 +78,7 @@ test('should return the message "config headers are required"', async t => {
 	const csvData = await CSVFileValidator('');
 
 	t.is(typeof csvData, 'object');
-	t.deepEqual(csvData.inValidMessages, ['config headers are required']);
+	t.deepEqual(csvData.inValidData, [{ message: 'config headers are required' }]);
 	t.deepEqual(csvData.data, []);
 });
 
@@ -86,42 +86,42 @@ test('should return no data if the file is empty', async t => {
 	const csvData = await CSVFileValidator('', CSVConfig);
 
 	t.is(typeof csvData, 'object');
-	t.deepEqual(csvData.inValidMessages, []);
+	t.deepEqual(csvData.inValidData, []);
 	t.deepEqual(csvData.data, []);
 });
 
 test('should return invalid messages with data', async t => {
 	const csvData = await CSVFileValidator(CSVInvalidFile, CSVConfig);
 
-	t.is(csvData.inValidMessages.length, 5);
+	t.is(csvData.inValidData.length, 5);
 	t.is(csvData.data.length, 2);
 });
 
 test('should return data, the file is valid', async t => {
 	const csvData = await CSVFileValidator(CSVValidFile, CSVConfig);
 
-	t.is(csvData.inValidMessages.length, 2);
+	t.is(csvData.inValidData.length, 2);
 	t.is(csvData.data.length, 2);
 });
 
 test('file without headers, the file is valid and headers are optional', async t => {
 	const csvData = await CSVFileValidator(CSVValidFileWithoutHeaders, { ...CSVConfig, isHeaderNameOptional: true });
 
-	t.is(csvData.inValidMessages.length, 1);
+	t.is(csvData.inValidData.length, 1);
 	t.is(csvData.data.length, 2);
 });
 
 test('file with headers, the file is valid and headers are optional', async t => {
 	const csvData = await CSVFileValidator(CSVValidFile, { ...CSVConfig, isHeaderNameOptional: true });
 
-	t.is(csvData.inValidMessages.length, 2);
+	t.is(csvData.inValidData.length, 2);
 	t.is(csvData.data.length, 2);
 });
 
 test('file is valid and headers are missed', async t => {
 	const csvData = await CSVFileValidator(CSVValidFileWithoutHeaders, CSVConfig);
 
-	t.is(csvData.inValidMessages.length, 6);
+	t.is(csvData.inValidData.length, 6);
 	t.is(csvData.data.length, 1);
 });
 
@@ -134,22 +134,24 @@ test('should return optional column', async t => {
 test('file is valid and Email is not unique at the ... row', async t => {
 	const csvData = await CSVFileValidator(CSVInvalidFileWithDuplicates, CSVConfig);
 
-	t.is(csvData.inValidMessages.length, 5);
+	t.is(csvData.inValidData.length, 5);
 	t.is(csvData.data.length, 3);
 });
 
 test('fields are mismatch: too many fields', async t => {
 	const csvData = await CSVFileValidator(CSVInvalidFileTooManyFields, { headers: [CSVConfig.headers[0]] });
 
-	t.is(csvData.inValidMessages.length, 1);
-	t.is(csvData.inValidMessages[0], 'Number of fields mismatch: expected 1 fields but parsed 3. In the row 1')
+	t.is(csvData.inValidData.length, 1);
+	t.is(csvData.inValidData[0].message, 'Number of fields mismatch: expected 1 fields but parsed 3. In the row 1')
+	t.is(csvData.inValidData[0].rowIndex, 1)
 	t.is(csvData.data.length, 1);
 });
 
 test('fields are mismatch: not enough fields', async t => {
 	const csvData = await CSVFileValidator(CSVInvalidFileNotEnoughFields, { headers: [CSVConfig.headers[5], CSVConfig.headers[0], CSVConfig.headers[1]] });
 
-	t.is(csvData.inValidMessages.length, 3);
-	t.is(csvData.inValidMessages[0], 'Number of fields mismatch: expected 3 fields but parsed 2. In the row 1');
+	t.is(csvData.inValidData.length, 3);
+	t.is(csvData.inValidData[0].message, 'Number of fields mismatch: expected 3 fields but parsed 2. In the row 1');
+	t.is(csvData.inValidData[0].rowIndex, 1)
 	t.is(csvData.data.length, 2);
 });

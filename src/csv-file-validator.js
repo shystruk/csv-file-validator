@@ -19,7 +19,7 @@
 		return new Promise(function (resolve, reject) {
 			if (!config || (config && !config.headers)) {
 				return resolve({
-					inValidMessages: ['config headers are required'],
+					inValidData: [{ message: 'config headers are required' }],
 					data: []
 				});
 			}
@@ -44,7 +44,7 @@
 	 */
 	function _prepareDataAndValidateFile(csvData, config) {
 		const file = {
-			inValidMessages: [],
+			inValidData: [],
 			data: []
 		};
 
@@ -53,9 +53,11 @@
 
 			// fields are mismatch
 			if (rowIndex !== 0 && row.length !== config.headers.length) {
-				file.inValidMessages.push(
-					'Number of fields mismatch: expected ' + config.headers.length + ' fields' +
-					' but parsed ' + row.length + '. In the row ' + rowIndex
+				file.inValidData.push({
+					rowIndex,
+					message: 'Number of fields mismatch: expected ' + config.headers.length + ' fields' +
+						' but parsed ' + row.length + '. In the row ' + rowIndex
+					}
 				);
 			}
 
@@ -76,11 +78,14 @@
 
 					if (!config.isHeaderNameOptional) {
 						if (valueConfig.name !== columnValue) {
-							file.inValidMessages.push(
-								_isFunction(valueConfig.headerError)
+							file.inValidData.push({
+								rowIndex: rowIndex + 1,
+								columnIndex: columnIndex + 1,
+								message: _isFunction(valueConfig.headerError)
 									? valueConfig.headerError(columnValue, valueConfig.name, rowIndex + 1, columnIndex + 1)
 									: 'Header name ' + columnValue + ' is not correct or missing in the ' + (rowIndex + 1) + ' row / '
-										+ (columnIndex + 1) + ' column. The Header name should be ' + valueConfig.name
+									+ (columnIndex + 1) + ' column. The Header name should be ' + valueConfig.name
+								}
 							);
 						}
 
@@ -89,26 +94,35 @@
 				}
 
 				if (valueConfig.required && !columnValue.length) {
-					file.inValidMessages.push(
-						_isFunction(valueConfig.requiredError)
+					file.inValidData.push({
+						rowIndex: rowIndex + 1,
+						columnIndex: columnIndex + 1,
+						message: _isFunction(valueConfig.requiredError)
 							? valueConfig.requiredError(valueConfig.name, rowIndex + 1, columnIndex + 1)
 							: String(valueConfig.name + ' is required in the ' + (rowIndex + 1) + ' row / ' + (columnIndex + 1) + ' column')
+						}
 					);
+
 				} else if (valueConfig.validate && !valueConfig.validate(columnValue)) {
-					file.inValidMessages.push(
-						_isFunction(valueConfig.validateError)
+					file.inValidData.push({
+						rowIndex: rowIndex + 1,
+						columnIndex: columnIndex + 1,
+						message: _isFunction(valueConfig.validateError)
 							? valueConfig.validateError(valueConfig.name, rowIndex + 1, columnIndex + 1)
 							: String(valueConfig.name + ' is not valid in the ' + (rowIndex + 1) + ' row / ' + (columnIndex + 1) + ' column')
+						}
 					);
 				} else if (valueConfig.dependentValidate &&
 					!valueConfig.dependentValidate(columnValue, _getClearRow(row))) {
-					file.inValidMessages.push(
-						_isFunction(valueConfig.validateError)
+					file.inValidData.push({
+						rowIndex: rowIndex + 1,
+						columnIndex: columnIndex + 1,
+						message: _isFunction(valueConfig.validateError)
 							? valueConfig.validateError(valueConfig.name, rowIndex + 1, columnIndex + 1)
 							: String(valueConfig.name + ' not passed dependent validation in the ' + (rowIndex + 1) + ' row / ' + (columnIndex + 1) + ' column')
+						}
 					);
 				}
-
 				if (valueConfig.optional) {
 					columnData[valueConfig.inputName] = columnValue;
 				}
@@ -152,10 +166,12 @@
 						const value = row[header.inputName];
 
 						if (duplicates.indexOf(value) >= 0) {
-							file.inValidMessages.push(
-								_isFunction(header.uniqueError)
+							file.inValidData.push({
+								rowIndex: rowIndex + 2,
+								message: _isFunction(header.uniqueError)
 									? header.uniqueError(header.name, rowIndex + 2)
 									: String(`${header.name} is not unique at the ${rowIndex + 2} row`)
+								}
 							);
 						} else {
 							duplicates.push(value);

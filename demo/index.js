@@ -34,10 +34,10 @@ const CSVConfig = {
 document.getElementById('file').onchange = function (event) {
 	CSVFileValidator(event.target.files[0], CSVConfig)
 		.then(csvData => {
-			csvData.inValidMessages.forEach(message => {
-				document.getElementById('invalidMessages').insertAdjacentHTML('beforeend', message)
+			csvData.inValidData.forEach(item => {
+				document.getElementById('invalidMessages').insertAdjacentHTML('beforeend', item.message)
 			})
-			console.log(csvData.inValidMessages)
+			console.log(csvData.inValidData)
 			console.log(csvData.data)
 		})
 }
