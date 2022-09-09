@@ -15,6 +15,9 @@ export interface FieldSchema {
 	/** If required is true than a column value will be checked if it is not empty */
 	required?: boolean;
 
+	/** If requiredAndNotBlank is true than a column value will be trimmed and checked if it is not empty */
+	requiredAndNotBlank?: boolean;
+
 	/** If it is true all header (title) column values will be checked for uniqueness */
 	unique?: boolean;
 

@@ -15,7 +15,7 @@ const isEmailValid = (email) => {
 }
 
 const isRoleForCountryValid = (country, row) => {
-	const role = row[5];
+	const role = row[4];
 	return country === 'Ukraine' && role === 'user';
 }
 
@@ -25,7 +25,7 @@ const uniqueError = (headerName, rowNumber) => (`<div class="red">${headerName} 
 const CSVConfig = {
 	headers: [
 		{ name: 'First Name', inputName: 'firstName', required: true, requiredError },
-		{ name: 'Last Name', inputName: 'lastName', required: true, requiredError },
+		{ name: 'Last Name', inputName: 'lastName', requiredAndNotBlank: true, requiredError},
 		{ name: 'Email', inputName: 'email', required: true, requiredError, unique: true, uniqueError, validate: isEmailValid, validateError },
 		{ name: 'Password', inputName: 'password', required: true, requiredError, validate: isPasswordValid, validateError },
 		{ name: 'Roles', inputName: 'roles', required: true, requiredError, isArray: true },
@@ -39,6 +39,7 @@ const CSVInvalidFile = [
 	CSVHeader,
 	'Vasyl;Stokolosa;v.stokol@gmail.com;123;admin,manager;',
 	'Vasyl_2;"";v.stokol@gmail.com;123123123;user;',
+	'Vasyl;" ";fake@test.com;12345;user;Ukraine',
 ].join('\n');
 
 const CSVValidFile = [
@@ -93,35 +94,35 @@ test('should return no data if the file is empty', async t => {
 test('should return invalid messages with data', async t => {
 	const csvData = await CSVFileValidator(CSVInvalidFile, CSVConfig);
 
-	t.is(csvData.inValidData.length, 5);
-	t.is(csvData.data.length, 2);
+	t.is(csvData.inValidData.length, 6);
+	t.is(csvData.data.length, 3);
 });
 
 test('should return data, the file is valid', async t => {
 	const csvData = await CSVFileValidator(CSVValidFile, CSVConfig);
 
-	t.is(csvData.inValidData.length, 2);
+	t.is(csvData.inValidData.length, 0);
 	t.is(csvData.data.length, 2);
 });
 
 test('file without headers, the file is valid and headers are optional', async t => {
 	const csvData = await CSVFileValidator(CSVValidFileWithoutHeaders, { ...CSVConfig, isHeaderNameOptional: true });
 
-	t.is(csvData.inValidData.length, 1);
+	t.is(csvData.inValidData.length, 0);
 	t.is(csvData.data.length, 2);
 });
 
 test('file with headers, the file is valid and headers are optional', async t => {
 	const csvData = await CSVFileValidator(CSVValidFile, { ...CSVConfig, isHeaderNameOptional: true });
 
-	t.is(csvData.inValidData.length, 2);
+	t.is(csvData.inValidData.length, 0);
 	t.is(csvData.data.length, 2);
 });
 
 test('file is valid and headers are missed', async t => {
 	const csvData = await CSVFileValidator(CSVValidFileWithoutHeaders, CSVConfig);
 
-	t.is(csvData.inValidData.length, 6);
+	t.is(csvData.inValidData.length, 5);
 	t.is(csvData.data.length, 1);
 });
 
@@ -134,7 +135,7 @@ test('should return optional column', async t => {
 test('file is valid and Email is not unique at the ... row', async t => {
 	const csvData = await CSVFileValidator(CSVInvalidFileWithDuplicates, CSVConfig);
 
-	t.is(csvData.inValidData.length, 5);
+	t.is(csvData.inValidData.length, 3);
 	t.is(csvData.data.length, 3);
 });
 

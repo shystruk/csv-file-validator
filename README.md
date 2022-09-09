@@ -80,6 +80,11 @@ Type: `Boolean` <br>
 
 If required is true than a column value will be checked if it is not empty
 
+### requiredAndNotBlank
+Type: `Boolean` <br>
+
+If required is true than a column value will be trimmed and checked that it is not blank
+
 ### requiredError
 Type: `Function` <br>
 

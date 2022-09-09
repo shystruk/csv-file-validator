@@ -93,7 +93,7 @@
 					}
 				}
 
-				if (valueConfig.required && !columnValue.length) {
+				if ((valueConfig.required && !columnValue.length) || (valueConfig.requiredAndNotBlank && !columnValue.trim().length)) {
 					file.inValidData.push({
 						rowIndex: rowIndex + 1,
 						columnIndex: columnIndex + 1,
