@@ -64,6 +64,9 @@
 			row.forEach(function (columnValue, columnIndex) {
 				const valueConfig = config.headers[columnIndex];
 
+				const columnIndex = (config.isColumnIndexAlphabetic)
+					? convertColumnNumberToLetter(columnIndex + 1) : columnIndex + 1;
+
 				columnValue = _clearValue(columnValue);
 
 				if (!valueConfig) {
@@ -80,11 +83,11 @@
 						if (valueConfig.name !== columnValue) {
 							file.inValidData.push({
 								rowIndex: rowIndex + 1,
-								columnIndex: columnIndex + 1,
+								columnIndex: columnIndex,
 								message: _isFunction(valueConfig.headerError)
-									? valueConfig.headerError(columnValue, valueConfig.name, rowIndex + 1, columnIndex + 1)
+									? valueConfig.headerError(columnValue, valueConfig.name, rowIndex + 1, columnIndex)
 									: 'Header name ' + columnValue + ' is not correct or missing in the ' + (rowIndex + 1) + ' row / '
-									+ (columnIndex + 1) + ' column. The Header name should be ' + valueConfig.name
+									+ (columnIndex) + ' column. The Header name should be ' + valueConfig.name
 								}
 							);
 						}
@@ -96,29 +99,29 @@
 				if (valueConfig.required && !columnValue.length) {
 					file.inValidData.push({
 						rowIndex: rowIndex + 1,
-						columnIndex: columnIndex + 1,
+						columnIndex: columnIndex,
 						message: _isFunction(valueConfig.requiredError)
-							? valueConfig.requiredError(valueConfig.name, rowIndex + 1, columnIndex + 1)
-							: String(valueConfig.name + ' is required in the ' + (rowIndex + 1) + ' row / ' + (columnIndex + 1) + ' column')
+							? valueConfig.requiredError(valueConfig.name, rowIndex + 1, columnIndex)
+							: String(valueConfig.name + ' is required in the ' + (rowIndex + 1) + ' row / ' + (columnIndex) + ' column')
 						}
 					);
 
 				} else if (valueConfig.validate && !valueConfig.validate(columnValue)) {
 					file.inValidData.push({
 						rowIndex: rowIndex + 1,
-						columnIndex: columnIndex + 1,
+						columnIndex: columnIndex,
 						message: _isFunction(valueConfig.validateError)
-							? valueConfig.validateError(valueConfig.name, rowIndex + 1, columnIndex + 1)
-							: String(valueConfig.name + ' is not valid in the ' + (rowIndex + 1) + ' row / ' + (columnIndex + 1) + ' column')
+							? valueConfig.validateError(valueConfig.name, rowIndex + 1, columnIndex)
+							: String(valueConfig.name + ' is not valid in the ' + (rowIndex + 1) + ' row / ' + (columnIndex) + ' column')
 						}
 					);
 				} else if (valueConfig.dependentValidate &&
 					!valueConfig.dependentValidate(columnValue, _getClearRow(row))) {
 					file.inValidData.push({
 						rowIndex: rowIndex + 1,
-						columnIndex: columnIndex + 1,
+						columnIndex: columnIndex,
 						message: _isFunction(valueConfig.validateError)
-							? valueConfig.validateError(valueConfig.name, rowIndex + 1, columnIndex + 1)
+							? valueConfig.validateError(valueConfig.name, rowIndex + 1, columnIndex)
 							: String(valueConfig.name + ' not passed dependent validation in the ' + (rowIndex + 1) + ' row / ' + (columnIndex + 1) + ' column')
 						}
 					);
@@ -198,6 +201,32 @@
 	 */
 	function _clearValue(value) {
 		return value.replace(/^\ufeff/g, '');
+	}
+
+	/**
+	 * Convert column number to column letter
+	 * @param {Number} columnNumber
+	 * @private
+	 * @return {String}
+	 */
+	function convertColumnNumberToLetter(columnNumber) {
+		// Create an empty string to store the column letter
+		let columnLetter = '';
+
+		// Loop through the column number, starting with the least significant digit
+		while (columnNumber > 0) {
+			// Get the least significant digit and add 1 to it (since 'A' is the first letter)
+			let digit = (columnNumber - 1) % 26 + 1;
+
+			// Convert the digit to the corresponding letter and add it to the beginning of the string
+			columnLetter = String.fromCharCode(digit + 64) + columnLetter;
+
+			// Divide the column number by 26 and discard the remainder to move on to the next digit
+			columnNumber = Math.floor((columnNumber - 1) / 26);
+		}
+
+		// Return the column letter
+		return columnLetter;
 	}
 
 	return CSVFileValidator;

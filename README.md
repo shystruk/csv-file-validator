@@ -46,6 +46,7 @@ Type: `Object` <br>
 Config object should contain:<br>
 **headers** - Type: `Array`, row header (title) objects<br>
 **isHeaderNameOptional** - Type: `Boolean`, skip the header name if it is empty<br>
+**isColumnIndexAlphabetic** - Type: `Boolean`, convert numeric column index to alphabetic letter as similar to csv<br>
 **parserConfig** - Type: `Object`, optional, [papaparse](https://www.papaparse.com/docs#config) options.
 Default options, which can't be overridden: **skipEmptyLines**, **complete** and **error**
 
@@ -53,6 +54,7 @@ Default options, which can't be overridden: **skipEmptyLines**, **complete** and
 const config = {
     headers: [], // required
     isHeaderNameOptional: false // default (optional)
+    isColumnIndexAlphabetic: false // default (optional)
 }
 ```
 
