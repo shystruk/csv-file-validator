@@ -65,7 +65,7 @@
 				const valueConfig = config.headers[columnIndex];
 
 				const columnIndex = (config.isColumnIndexAlphabetic)
-					? convertColumnNumberToLetter(columnIndex + 1) : columnIndex + 1;
+					? _convertColumnNumberToLetter(columnIndex + 1) : columnIndex + 1;
 
 				columnValue = _clearValue(columnValue);
 
@@ -209,7 +209,7 @@
 	 * @private
 	 * @return {String}
 	 */
-	function convertColumnNumberToLetter(columnNumber) {
+	function _convertColumnNumberToLetter(columnNumber) {
 		// Create an empty string to store the column letter
 		let columnLetter = '';
 

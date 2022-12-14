@@ -84,7 +84,6 @@ export interface ValidatorConfig {
 	isHeaderNameOptional?: boolean;
 	parserConfig?: ParseConfig;
 	isColumnIndexAlphabetic?: boolean;
-
 }
 
 export default function CSVFileValidator<Row = any, Error = RowError>(
