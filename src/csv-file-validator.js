@@ -57,7 +57,7 @@
 			// fields are mismatch
 			if (rowIndex !== 0 && row.length !== config.headers.length) {
 				file.inValidData.push({
-					rowIndex,
+					rowIndex: rowIndex + 1,
 					message: 'Number of fields mismatch: expected ' + config.headers.length + ' fields' +
 						' but parsed ' + row.length + '. In the row ' + rowIndex
 				});

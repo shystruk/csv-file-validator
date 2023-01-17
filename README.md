@@ -1,3 +1,7 @@
+# Updates/Edits
+This version of csv-file-validator changes the row numbers in the validation errors to more accurately reflect where they are in the CSV file. Some errors are also customized.
+
+
 # CSV File Validator [![Twitter URL](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?hashtags=javascript&original_referer=https%3A%2F%2Fpublish.twitter.com%2F&ref_src=twsrc%5Etfw&text=Validation%20of%20CSV%20file%20against%20user%20defined%20schema%20(returns%20back%20object%20with%20data%20and%20invalid%20messages)&tw_p=tweetbutton&url=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fcsv-file-validator&via=shystrukk) #
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 [![codecov](https://codecov.io/gh/shystruk/csv-file-validator/branch/master/graph/badge.svg)](https://codecov.io/gh/shystruk/csv-file-validator)
