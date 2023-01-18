@@ -22,7 +22,7 @@ import CSVFileValidator from 'csv-file-validator'
 CSVFileValidator(file, config)
     .then(csvData => {
         csvData.data // Array of objects from file
-        csvData.inValidMessages // Array of error messages
+        csvData.inValidData // Array of error messages
     })
     .catch(err => {})
 ```
