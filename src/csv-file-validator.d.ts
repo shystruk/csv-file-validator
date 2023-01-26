@@ -12,7 +12,7 @@ export interface FieldSchema {
 	/** Makes column optional. If true column value will be return */
 	optional?: boolean;
 
-	/** If required is true than a column value will be checked if it is not empty */
+	/** If required is true then a column value will be checked if it is not empty */
 	required?: boolean;
 
 	/** If it is true all header (title) column values will be checked for uniqueness */
@@ -48,7 +48,7 @@ export interface FieldSchema {
 	 * Validate column value.
 	 * Must return true for valid field and false for invalid.
 	 */
-	validate?: (field: string) => boolean;
+	validate?: (field: string|number|boolean) => boolean;
 
 	/**
 	 * Validate column value that depends on other values in other columns.
@@ -83,6 +83,7 @@ export interface ValidatorConfig {
 	headers: FieldSchema[];
 	isHeaderNameOptional?: boolean;
 	parserConfig?: ParseConfig;
+	isColumnIndexAlphabetic?: boolean;
 }
 
 export default function CSVFileValidator<Row = any, Error = RowError>(

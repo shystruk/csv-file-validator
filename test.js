@@ -35,6 +35,14 @@ const CSVConfig = {
 
 const CSVHeader = CSVConfig.headers.map(i => i.name).join(';');
 
+const CSVConfig_1 = {
+	...CSVConfig,
+	parserConfig: {
+		dynamicTyping: true
+	},
+	isColumnIndexAlphabetic: true
+}
+
 const CSVInvalidFile = [
 	CSVHeader,
 	'Vasyl;Stokolosa;v.stokol@gmail.com;123;admin,manager;',
@@ -121,8 +129,18 @@ test('file with headers, the file is valid and headers are optional', async t =>
 test('file is valid and headers are missed', async t => {
 	const csvData = await CSVFileValidator(CSVValidFileWithoutHeaders, CSVConfig);
 
-	t.is(csvData.inValidData.length, 6);
+	t.is(csvData.inValidData.length, 12);
 	t.is(csvData.data.length, 1);
+});
+
+test('should return alphabetic columns', async t => {
+	const csvData = await CSVFileValidator(CSVInvalidFile, CSVConfig_1);
+
+	t.is(csvData.inValidData.length, 6);
+	t.is(csvData.data.length, 2);
+	t.is(csvData.inValidData[0].message,
+		'<div class="red">Password is not valid in the <strong>2 row</strong> / <strong>D column</strong></div>'
+	);
 });
 
 test('should return optional column', async t => {
