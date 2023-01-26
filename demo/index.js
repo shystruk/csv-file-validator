@@ -17,6 +17,10 @@ const isEmailValid = function (email) {
 	return reqExp.test(email)
 }
 
+const isAgeValid = function (age) {
+	return age > 0
+}
+
 const isPasswordValid = function (password) {
 	return password.length >= 4
 }
@@ -36,6 +40,28 @@ document.getElementById('file').onchange = function (event) {
 		.then(csvData => {
 			csvData.inValidData.forEach(item => {
 				document.getElementById('invalidMessages').insertAdjacentHTML('beforeend', item.message)
+			})
+			console.log(csvData.inValidData)
+			console.log(csvData.data)
+		})
+}
+
+const CSVConfig_1 = {
+	headers: [
+		{ name: 'Name', inputName: 'name', required: true, requiredError },
+		{ name: 'Surname', inputName: 'surname', required: true, requiredError, optional: true },
+		{ name: 'Age', inputName: 'age', required: true, requiredError, validate: isAgeValid, validateError },
+	],
+	parserConfig: {
+		dynamicTyping: true
+	}
+}
+
+document.getElementById('file_1').onchange = function (event) {
+	CSVFileValidator(event.target.files[0], CSVConfig_1)
+		.then(csvData => {
+			csvData.inValidData.forEach(item => {
+				document.getElementById('invalidMessages_1').insertAdjacentHTML('beforeend', item.message)
 			})
 			console.log(csvData.inValidData)
 			console.log(csvData.data)

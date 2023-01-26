@@ -10,9 +10,15 @@
         </style>
     </head>
     <body>
-        <input type="file" accept=".csv" id="file" />
+		<div>Semicolon delimiter (demo.csv)</div>
+        <p><input type="file" accept=".csv" id="file" /></p>
+		<div id="invalidMessages"></div>
 
-        <div id="invalidMessages"></div>
+		<br/><br/>
+
+		<div>Comma delimiter (demo_comma.csv)</div>
+		<p><input type="file" accept=".csv" id="file_1" /></p>
+		<div id="invalidMessages_1"></div>
 
         <script src="dist/bundle.js"></script>
     </body>
