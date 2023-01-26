@@ -53,7 +53,7 @@ Default options, which can't be overridden: **skipEmptyLines**, **complete** and
 ```javascript
 const config = {
     headers: [], // required
-    isHeaderNameOptional: false // default (optional)
+    isHeaderNameOptional: false, // default (optional)
     isColumnIndexAlphabetic: false // default (optional)
 }
 ```

@@ -32,7 +32,8 @@ const CSVConfig = {
 		{ name: 'Email', inputName: 'email', required: true, requiredError, unique: true, uniqueError, validate: isEmailValid, validateError },
 		{ name: 'Password', inputName: 'password', required: true, requiredError, validate: isPasswordValid, validateError },
 		{ name: 'Roles', inputName: 'roles', required: true, requiredError, isArray: true }
-	]
+	],
+	isColumnIndexAlphabetic: true
 }
 
 document.getElementById('file').onchange = function (event) {
