@@ -57,10 +57,11 @@
 			// fields are mismatch
 			if (rowIndex !== 0 && row.length !== config.headers.length) {
 				file.inValidData.push({
-					rowIndex,
+					rowIndex: rowIndex + 1,
 					message: 'Number of fields mismatch: expected ' + config.headers.length + ' fields' +
-						' but parsed ' + row.length + '. In the row ' + rowIndex
-				});
+						' but found ' + row.length + '.'
+				}
+				);
 			}
 
 			// check if the header matches with a config
@@ -95,13 +96,14 @@
 					if (!config.isHeaderNameOptional) {
 						if (valueConfig.name !== columnValue) {
 							file.inValidData.push({
-								rowIndex: rowIndex + 1,
-								columnIndex: columnIndex,
+								rowIndex: rowIndex,
+								columnIndex: columnIndex + 1,
 								message: _isFunction(valueConfig.headerError)
-									? valueConfig.headerError(columnValue, valueConfig.name, rowIndex + 1, columnIndex)
-									: 'Header name ' + columnValue + ' is not correct or missing in the ' + (rowIndex + 1) + ' row / '
-									+ (columnIndex) + ' column. The Header name should be ' + valueConfig.name
-							});
+									? valueConfig.headerError(columnValue, valueConfig.name, rowIndex, columnIndex + 1)
+									: 'Header name ' + columnValue + ' is incorrect or missing in column '
+									+ (columnIndex + 1) + ' of the header row. The Header name should be ' + valueConfig.name
+							}
+							);
 						}
 
 						return;
@@ -113,17 +115,20 @@
 						rowIndex: rowIndex + 1,
 						columnIndex: columnIndex,
 						message: _isFunction(valueConfig.requiredError)
-							? valueConfig.requiredError(valueConfig.name, rowIndex + 1, columnIndex)
-							: String(valueConfig.name + ' is required in the ' + (rowIndex + 1) + ' row / ' + (columnIndex) + ' column')
-					});
+							? valueConfig.requiredError(valueConfig.name, rowIndex + 1, columnIndex + 1)
+							: String(valueConfig.name + ' is required in Row ' + (rowIndex + 1) + ' Column ' + (columnIndex + 1))
+					}
+					);
+
 				} else if (valueConfig.validate && !valueConfig.validate(columnValue)) {
 					file.inValidData.push({
 						rowIndex: rowIndex + 1,
 						columnIndex: columnIndex,
 						message: _isFunction(valueConfig.validateError)
-							? valueConfig.validateError(valueConfig.name, rowIndex + 1, columnIndex)
-							: String(valueConfig.name + ' is not valid in the ' + (rowIndex + 1) + ' row / ' + (columnIndex) + ' column')
-					});
+							? valueConfig.validateError(valueConfig.name, rowIndex + 1, columnIndex + 1)
+							: String(valueConfig.name + ' is not valid in Row ' + (rowIndex + 1) + ' Column ' + (columnIndex + 1))
+					}
+					);
 				} else if (valueConfig.dependentValidate &&
 					!valueConfig.dependentValidate(columnValue, _getClearRow(row))) {
 					file.inValidData.push({
@@ -132,7 +137,8 @@
 						message: _isFunction(valueConfig.validateError)
 							? valueConfig.validateError(valueConfig.name, rowIndex + 1, columnIndex)
 							: String(valueConfig.name + ' not passed dependent validation in the ' + (rowIndex + 1) + ' row / ' + (columnIndex + 1) + ' column')
-					});
+					}
+					);
 				}
 				if (valueConfig.optional) {
 					columnData[valueConfig.inputName] = columnValue;
@@ -184,7 +190,8 @@
 								message: _isFunction(header.uniqueError)
 									? header.uniqueError(header.name, rowIndex + 2)
 									: String(`${header.name} is not unique at the ${rowIndex + 2} row`)
-							});
+							}
+							);
 						} else {
 							duplicates.push(value);
 						}
