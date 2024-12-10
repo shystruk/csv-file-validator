@@ -1,6 +1,6 @@
 {
 	"name": "csv-file-validator",
-	"version": "2.1.0",
+	"version": "2.2.0",
 	"description": "Validation of CSV file against user defined schema (returns back object with data and invalid messages)",
 	"main": "./src/csv-file-validator.js",
 	"types": "./src/csv-file-validator.d.ts",
@@ -34,10 +34,10 @@
 	"dependencies": {
 		"famulus": "^2.2.3",
 		"lodash": "^4.17.21",
-		"papaparse": "^5.3.2"
+		"papaparse": "^5.4.1"
 	},
 	"devDependencies": {
-		"@types/papaparse": "^5.3.2",
+		"@types/papaparse": "^5.3.15",
 		"ava": "^0.25.0",
 		"codecov.io": "^0.1.6",
 		"nyc": "^11.4.1",

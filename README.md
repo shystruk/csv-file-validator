@@ -136,6 +136,11 @@ function(email, row) {
 }
 ```
 
+### dependentValidateError
+Type: `Function` <br>
+
+If dependentValidate returns false dependentValidateError function will be called with arguments **headerName, rowNumber, columnNumber**
+
 ### isArray
 Type: `Boolean` <br>
 

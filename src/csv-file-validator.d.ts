@@ -51,17 +51,24 @@ export interface FieldSchema {
 	validate?: (field: string|number|boolean) => boolean;
 
 	/**
+	 * If validate returns false validateError function
+	 * will be called with arguments headerName, rowNumber, columnNumber.
+	 */
+	validateError?: (headerName: string, rowNumber: number,
+					 columnNumber: number) => string;
+
+	/**
 	 * Validate column value that depends on other values in other columns.
 	 * Must return true for valid field and false for invalid.
 	 */
 	dependentValidate?: (field: string, row: [string]) => boolean;
 
 	/**
-	 * If validate returns false validateError function
+	 * If dependentValidate returns false dependentValidateError function
 	 * will be called with arguments headerName, rowNumber, columnNumber.
 	 */
-	validateError?: (headerName: string, rowNumber: number,
-					 columnNumber: number) => string;
+	dependentValidateError?: (headerName: string, rowNumber: number,
+		columnNumber: number) => string;
 }
 
 export interface RowError {

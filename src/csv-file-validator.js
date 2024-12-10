@@ -129,8 +129,8 @@
 					file.inValidData.push({
 						rowIndex: rowIndex + 1,
 						columnIndex: columnIndex,
-						message: _isFunction(valueConfig.validateError)
-							? valueConfig.validateError(valueConfig.name, rowIndex + 1, columnIndex)
+						message: _isFunction(valueConfig.dependentValidateError)
+							? valueConfig.dependentValidateError(valueConfig.name, rowIndex + 1, columnIndex)
 							: String(valueConfig.name + ' not passed dependent validation in the ' + (rowIndex + 1) + ' row / ' + (columnIndex + 1) + ' column')
 					});
 				}
