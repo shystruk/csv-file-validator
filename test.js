@@ -9,6 +9,10 @@ const validateError = (headerName, rowNumber, columnNumber) => (
 	`<div class="red">${headerName} is not valid in the <strong>${rowNumber} row</strong> / <strong>${columnNumber} column</strong></div>`
 )
 
+const dependentValidateError = (headerName, rowNumber, columnNumber) => (
+	`<div class="red">${headerName} is not valid. Country should be set to Ukraine. <strong>${rowNumber} row</strong> / <strong>${columnNumber} column</strong></div>`
+)
+
 const isEmailValid = (email) => {
 	const reqExp = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$/
 	return reqExp.test(email)
@@ -29,7 +33,7 @@ const CSVConfig = {
 		{ name: 'Email', inputName: 'email', required: true, requiredError, unique: true, uniqueError, validate: isEmailValid, validateError },
 		{ name: 'Password', inputName: 'password', required: true, requiredError, validate: isPasswordValid, validateError },
 		{ name: 'Roles', inputName: 'roles', required: true, requiredError, isArray: true },
-		{ name: 'Country', inputName: 'country', optional: true, dependentValidate: isRoleForCountryValid }
+		{ name: 'Country', inputName: 'country', optional: true, dependentValidate: isRoleForCountryValid, dependentValidateError }
 	]
 }
 
@@ -103,6 +107,9 @@ test('should return invalid messages with data', async t => {
 
 	t.is(csvData.inValidData.length, 5);
 	t.is(csvData.data.length, 2);
+	t.is(csvData.inValidData[3].message,
+		'<div class="red">Country is not valid. Country should be set to Ukraine. <strong>3 row</strong> / <strong>6 column</strong></div>'
+	);
 });
 
 test('should return data, the file is valid', async t => {

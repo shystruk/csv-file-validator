@@ -8,6 +8,15 @@ const validateError = (headerName, rowNumber, columnNumber) => {
 	return `<div class="red">${headerName} is not valid in the <strong>${rowNumber} row</strong> / <strong>${columnNumber} column</strong></div>`
 }
 
+const dependentValidateError = (headerName, rowNumber, columnNumber) => (
+	`<div class="red">${headerName} is not valid. Country should be set to Ukraine or role is not user. <strong>${rowNumber} row</strong> / <strong>${columnNumber} column</strong></div>`
+)
+
+const isRoleForCountryValid = (country, row) => {
+	const role = row[4];
+	return country === 'Ukraine' && role === 'user';
+}
+
 const uniqueError = (headerName, rowNumber) => {
 	return `<div class="red">${headerName} is not unique at the <strong>${rowNumber} row</strong></div>`
 }
@@ -31,7 +40,8 @@ const CSVConfig = {
 		{ name: 'Last Name', inputName: 'lastName', required: true, requiredError, optional: true },
 		{ name: 'Email', inputName: 'email', required: true, requiredError, unique: true, uniqueError, validate: isEmailValid, validateError },
 		{ name: 'Password', inputName: 'password', required: true, requiredError, validate: isPasswordValid, validateError },
-		{ name: 'Roles', inputName: 'roles', required: true, requiredError, isArray: true }
+		{ name: 'Roles', inputName: 'roles', required: true, requiredError, isArray: true },
+		{ name: 'Country', inputName: 'country', optional: true, dependentValidate: isRoleForCountryValid, dependentValidateError }
 	],
 	isColumnIndexAlphabetic: true
 }
