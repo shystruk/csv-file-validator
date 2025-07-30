@@ -1,4 +1,5 @@
 import CSVFileValidator from '../src/csv-file-validator'
+import DOMPurify from 'dompurify'; // Import DOMPurify for sanitization
 
 const requiredError = (headerName, rowNumber, columnNumber) => {
 	return `<div class="red">${headerName} is required in the <strong>${rowNumber} row</strong> / <strong>${columnNumber} column</strong></div>`
@@ -50,7 +51,8 @@ document.getElementById('file').onchange = function (event) {
 	CSVFileValidator(event.target.files[0], CSVConfig)
 		.then(csvData => {
 			csvData.inValidData.forEach(item => {
-				document.getElementById('invalidMessages').insertAdjacentHTML('beforeend', item.message)
+				const sanitizedMessage = DOMPurify.sanitize(item.message); // Sanitize the message
+				document.getElementById('invalidMessages').insertAdjacentHTML('beforeend', sanitizedMessage)
 			})
 			console.log(csvData.inValidData)
 			console.log(csvData.data)
@@ -72,7 +74,8 @@ document.getElementById('file_1').onchange = function (event) {
 	CSVFileValidator(event.target.files[0], CSVConfig_1)
 		.then(csvData => {
 			csvData.inValidData.forEach(item => {
-				document.getElementById('invalidMessages_1').insertAdjacentHTML('beforeend', item.message)
+				const sanitizedMessage = DOMPurify.sanitize(item.message); // Sanitize the message
+				document.getElementById('invalidMessages_1').insertAdjacentHTML('beforeend', sanitizedMessage)
 			})
 			console.log(csvData.inValidData)
 			console.log(csvData.data)
